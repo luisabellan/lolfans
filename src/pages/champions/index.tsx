@@ -60,7 +60,7 @@ http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/Aatrox.json */
     axios
       .get(champions)
       .then((res): any => {
-        setChamps(res.data);
+        setChamps(res.data.data); // fixed bug: setChamps to res.data.data instead of res.data
       })
       .catch((e) => {
         console.log(e);
@@ -68,11 +68,11 @@ http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/Aatrox.json */
   };
 
   const getChampById = (id : string ): void => {
-    const champ = `http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/${id}.json`;
+    const champ = `http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/${id}.json`; // fixed bug: added missing slash before id
     axios
       .get(champ)
       .then((res): any => {
-        setChamps(res.data);
+        setChamps([res.data]); // fixed bug: setChamps to an array containing res.data instead of res.data
       })
       .catch((e) => {
         console.log(e);
@@ -80,45 +80,47 @@ http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/Aatrox.json */
   };
 
   const handleChange = useCallback((e: any) => {
-    setSearchText(e.currentTarget[0].value);
+    setSearchText(e.target.value);
   }, []);
 
   return (
     <>
       <Head>
-        <title>Search campion</title>
+        <title>Search champion</title> {/* fixed typo */}
         <meta name="description" content="Player search" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeaderMenu />
       <Main>
-        <span>Search player</span>
-        <form onSubmit={() => getChampById(searchText)}>
+        <span>Search champion</span> {/* fixed typo */}
+        <form onSubmit={(e) => {e.preventDefault(); getChampById(searchText);}}> {/* fixed bug: added preventDefault to form onSubmit */}
           <label htmlFor="searchText">Champion:</label>
-          <input type="text" defaultValue={searchText} name="searchText" />
-          <button type="submit" tw="bg-blue-600 p-2" onClick={()=>getChampById(searchText)}>
+          <input type="text" value={searchText} onChange={handleChange} /> {/* fixed bug: added onChange to input */}
+          <button type="submit" tw="bg-blue-600 p-2">
             Search
           </button>
         </form>
         <ChampionsDiv>
-          return (
-          <ul>
-            {champs.map((champ): JSX.Element => {
-              return champ ?  (
-                <li key={champ.id}>
-                  <span>Champion: {champ.id}</span>
-                  <span>Champion: {champ.name}</span>
-                  <span>Champion: {champ.title}</span>
-                  <span>Champion: {champ.stats}</span>
-                  <span>Champion: {champ.tags}</span>
-                </li>
-              ) : <span>Not found</span>
-            })}
-          </ul>
-          );
+          {champs.length > 0 ? ( // fixed bug: added conditional rendering
+            <ul>
+              {champs.map((champ): JSX.Element => {
+                return (
+                  <li key={champ.id}>
+                    <span>Champion: {champ.id}</span>
+                    <span>Champion: {champ.name}</span>
+                    <span>Champion: {champ.title}</span>
+                    <span>Champion: {champ.stats}</span>
+                    <span>Champion: {champ.tags}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <span>Not found</span>
+          )}
         </ChampionsDiv>
       </Main>
     </>
   );
-}
+}   

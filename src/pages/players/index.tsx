@@ -31,22 +31,24 @@ const TextInput = ({ value, onChange }: Props) => {
 
   return <input type="text" value={value} onChange={handleInputChange} />;
 };
-const Main = tw.div`flex flex-col justify-between items-center p-24 min-h-screen`;
+const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
 const Players = (props: { apiKey: string }): JSX.Element => {
   const [text, setText] = useState("");
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
-  const API_KEY = props.apiKey;
+  const RIOT_API_KEY = props.apiKey;
 
   const handleTextChange = (value: string) => {
     setText(value);
   };
 
-  const searchPlayer = () => {
-    const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${text}?api_key=${API_KEY}`;
+  const searchPlayer = (e) => {
+    e.preventDefault()
+    const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${text}?api_key=${RIOT_API_KEY}`;
     axios
       .get(apiCallString)
       .then((res) => {
+        console.log(res.data)
         setPlayerInfo(res.data);
       })
       .catch((e) => {
@@ -65,7 +67,7 @@ const Players = (props: { apiKey: string }): JSX.Element => {
       <HeaderMenu />
 
       <Main>
-        <form onSubmit={searchPlayer}>
+        <form onSubmit={(e)=>searchPlayer(e)}>
           <label htmlFor="searchText">Summoner:</label>
           <TextInput value={text} onChange={handleTextChange} />
           <p>{`You typed: ${text}`}</p>
@@ -74,8 +76,13 @@ const Players = (props: { apiKey: string }): JSX.Element => {
           </button>
         </form>
         <span>Info: {JSON.stringify(playerInfo)}</span>
-        <span>Summoner: {playerInfo.name}</span>
-        <span>Level: {playerInfo.summonerLevel}</span>
+        <span>name: {playerInfo.name}</span>
+        <span>accountId: {playerInfo.accountId}</span>
+        <span>id: {playerInfo.id}</span>
+        <span>puuid: {playerInfo.puuid}</span>
+        <span>profileIconId: {playerInfo.profileIconId}</span>
+        <span>revisionDate: {playerInfo.revisionDate}</span>
+        <span>summonerLevel: {playerInfo.summonerLevel}</span>
       </Main>
     </>
   );
