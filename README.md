@@ -516,3 +516,6 @@ const Input = ({ hasHover }) => (
 ## Next steps
 
 For more usage docs, visit the [Stitches docs](https://stitches.dev/docs/introduction)
+
+
+Added jest and react-testing-library
