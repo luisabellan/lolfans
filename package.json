@@ -1,8 +1,7 @@
 {
   "babelMacros": {
     "twin": {
-      "preset": "stitches",
-      "stitchesConfig": "stitches.config.ts"
+      "preset": "emotion"
     }
   },
   "scripts": {
@@ -11,22 +10,31 @@
     "start": "next start"
   },
   "dependencies": {
-    "@stitches/react": "^1.2.8",
+    "@emotion/css": "^11.10.6",
+    "@emotion/react": "^11.10.6",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.6",
     "axios": "^1.3.5",
     "next": "^13.3.0",
+    "nextjs-cors": "^2.1.2",
     "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.4",
-    "@babel/plugin-syntax-typescript": "^7.21.4",
+    "@babel/core": "^7.21.3",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@emotion/babel-plugin": "^11.10.5",
+    "@testing-library/react": "^14.0.0",
     "@types/node": "^18.15.11",
-    "@types/react": "^18.0.33",
-    "babel-loader": "^9.1.2",
+    "@types/react": "^18.0.35",
+    "babel-loader": "^9.1.0",
     "babel-plugin-macros": "^3.1.0",
+    "prettier": "^2.7.1",
     "tailwindcss": "^3.3.1",
     "twin.macro": "^3.3.0",
-    "typescript": "^5.0.4"
-  }
+    "typescript": "^4.8.4"
+  },
+  "version": "0.0.0"
 }

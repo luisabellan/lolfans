@@ -1,35 +1,36 @@
-// https://nextjs.org/docs/advanced-features/custom-document
-// https://stitches.dev/docs/server-side-rendering
+import React from 'react'
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { extractCritical } from '@emotion/server'
 
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
-import { getCssText } from '../../stitches.config'
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    const initialProps = await Document.getInitialProps(ctx)
+    const critical = extractCritical(initialProps.html)
+    initialProps.html = critical.html
+    initialProps.styles = (
+      <React.Fragment>
+        {initialProps.styles}
+        <style
+          data-emotion-css={critical.ids.join(' ')}
+          dangerouslySetInnerHTML={{ __html: critical.css }}
+        />
+      </React.Fragment>
+    )
 
-export default class Document extends NextDocument {
-  static async getInitialProps(ctx: any) {
-    try {
-      const initialProps = await NextDocument.getInitialProps(ctx)
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {/* Stitches CSS for SSR */}
-            <style
-              id="stitches"
-              dangerouslySetInnerHTML={{ __html: getCssText() }}
-            />
-          </>
-        ),
-      }
-    } finally {
-    }
+    return initialProps
   }
 
   render() {
+    const critical = extractCritical(this.props.html)
+
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <style
+            data-emotion-css={critical.ids.join(' ')}
+            dangerouslySetInnerHTML={{ __html: critical.css }}
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />

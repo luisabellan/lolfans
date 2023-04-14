@@ -1,6 +1,6 @@
 const nextJest = require('next/jest')
 
-/* const babelConfigEmotion = {
+const babelConfigEmotion = {
   presets: [
     [
       'next/babel',
@@ -16,7 +16,7 @@ const nextJest = require('next/jest')
     require.resolve('babel-plugin-macros'),
     require.resolve('@emotion/babel-plugin'),
   ],
-} */
+}
 
 // const babelConfigStyledComponents = {
 //   presets: [['next/babel', { 'preset-react': { runtime: 'automatic' } }]],
@@ -26,10 +26,10 @@ const nextJest = require('next/jest')
 //   ],
 // }
 
-const babelConfigStitches = {
+/* const babelConfigStitches = {
    presets: [['next/babel', { 'preset-react': { runtime: 'automatic' } }]],
    plugins: ['babel-plugin-macros'],
-}
+} */
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const customJestConfig = {

@@ -1,20 +1,18 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { css, styled } from '@stitches/react';
-import type * as Stitches from '@stitches/react';
+import tw, { styled } from "twin.macro";
+import { css } from "@emotion/react";
+
 
 // import { Inter } from 'next/font/google'
 import HeaderMenu from '@/components/HeaderMenu'
 
 // const inter = Inter({ subsets: ['latin'] })
 
-const headerStyle = 'text-3xl, font-bold'
 
-
-const Main = styled("main", {
-  
-});
+const Header = tw.h1`text-3xl font-bold`;
+const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
 export default function Home() {
   return (
@@ -35,7 +33,7 @@ export default function Home() {
         "padding": "6rem",
         "min-height": "100vh",
       }}>
-        <h1 tw={headerStyle}>LoLfans</h1>
+        <Header>LoLfans</Header>
       </div>
     </>
   )

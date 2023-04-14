@@ -1,21 +1,18 @@
 import Head from "next/head";
 import Link from "next/link";
-// import { css, styled } from '@stitches/react';
+
 import tw, { styled } from "twin.macro";
 
-import type * as Stitches from "@stitches/react";
-
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { SetStateAction, ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import HeaderMenu from "@/components/HeaderMenu";
 // import { Inter } from 'next/font/google'
-import styles from "@/styles/Players.module.scss";
 import React from "react";
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -23,49 +20,59 @@ const openai = new OpenAIApi(configuration);
 
 const headStyle = "text-3xl, font-bold";
 
-export default function ImageGenerator() {
-  const [image, setImage] = useState(null);
-  const [promptInput, setPromptInput] = useState("pangolin");
-  
-  const Input = styled("input", {
-    color: "red",
-    margin: "2rem",
-  });
-  
-  const ImageGeneratorContainer = styled("div", {});
-  
-  const Main = styled("main", {
-    display: "flex",
-    "flex-direction": "column",
-    "justify-content": "space-between",
-    "align-items": "center",
-    padding: "6rem",
-    "min-height": "100vh",
-  });
-  
-  async function generateImage(myPrompt) {
-    try {
-      const response = await openai.createImage({
-        prompt: myPrompt,
-        n: 1,
-        size: "1024x1024",
-      });
-      console.log(JSON.stringify(response));
-      const imageData = JSON.stringify(response);
-      console.log(imageData)
-      // setImage(imageData)
-    } catch (error: any) {
-      if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-      }
-    }
-  }
+interface ImageResponse {
+  data: {
+    url: string;
+  }[];
+}
 
-  useEffect(() => {
-  }, []);
+interface TextInputProps {
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+type Props = {
+  onChange: (value: string) => void;
+  value: string;
+};
+
+export default function ImageGeneration() {
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [text, setText] = useState("");
+
+  const ImageGeneratorContainer = styled("div", {});
+
+  const TextInput = ({ value, onChange }: Props) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.value);
+    };
+  
+    return <input type="text" value={value} onChange={handleInputChange} />;
+  };
+  const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
+  
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const response = await axios.post<ImageResponse>(
+      "https://api.openai.com/v1/images/generations",
+      {
+        model: "image-alpha-001",
+        prompt: description,
+        num_images: 1,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+        },
+      }
+    );
+    setImageUrl(response.data.data[0].url);
+  };
 
 
   return (
@@ -77,30 +84,27 @@ export default function ImageGenerator() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeaderMenu />
-      <Main>
-        <span>Generate image</span>
-        <form onSubmit={() => generateImage(promptInput)}>
-          <label htmlFor="prompt">Prompt:</label>
-          <input type="text" defaultValue={promptInput} name="prompt" />
-          <button
-            type="submit"
-            tw="bg-blue-600 p-2"
-            onClick={() => generateImage(promptInput)}
-          >
-            Generate image
-          </button>
-          <img src={`${image}`} alt={`${promptInput}`} />
+      <div>
+        <h1>Generate image</h1>
+
+        <form onSubmit={handleSubmit}>
+          <label>
+            Description:
+          <input type="text" value={description} onChange={handleChange} />
+
+          </label>
+          <button type="submit">Generate Image</button>
         </form>
-      </Main>
+        {imageUrl && <img width="400" height="400" src={imageUrl} alt="Generated Image" />}
+      </div>
     </>
   );
 }
 
 export async function getStaticProps() {
-  // Connect to Database using DB properties
   return {
     props: {
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "",
     },
-  }
+  };
 }

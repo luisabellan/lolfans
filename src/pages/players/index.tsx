@@ -14,11 +14,6 @@ interface PlayerInfo {
   revisionDate: string;
 }
 
-interface TextInputProps {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
-
 type Props = {
   onChange: (value: string) => void;
   value: string;
@@ -34,21 +29,25 @@ const TextInput = ({ value, onChange }: Props) => {
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
 const Players = (props: { apiKey: string }): JSX.Element => {
-  const [text, setText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
   const RIOT_API_KEY = props.apiKey;
 
   const handleTextChange = (value: string) => {
-    setText(value);
+    setSearchText(value);
   };
 
-  const searchPlayer = (e) => {
-    e.preventDefault()
-    const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${text}?api_key=${RIOT_API_KEY}`;
+  const handleSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    searchPlayer();
+  };
+
+  const searchPlayer = () => {
+    const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${searchText}?api_key=${RIOT_API_KEY}`;
     axios
       .get(apiCallString)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setPlayerInfo(res.data);
       })
       .catch((e) => {
@@ -67,10 +66,10 @@ const Players = (props: { apiKey: string }): JSX.Element => {
       <HeaderMenu />
 
       <Main>
-        <form onSubmit={(e)=>searchPlayer(e)}>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="searchText">Summoner:</label>
-          <TextInput value={text} onChange={handleTextChange} />
-          <p>{`You typed: ${text}`}</p>
+          <TextInput value={searchText} onChange={handleTextChange} />
+          <p>{`You typed: ${searchText}`}</p>
           <button type="submit" tw="bg-blue-600 p-2">
             Search
           </button>
@@ -93,7 +92,7 @@ export default Players;
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.RIOT_API_KEY ?? "",
+      apiKey: process.env.NEXT_PUBLIC_RIOT_API_KEY ?? "",
     },
   };
 }
