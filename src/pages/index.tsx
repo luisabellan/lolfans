@@ -1,20 +1,22 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
 import tw, { styled } from "twin.macro";
 import { css } from "@emotion/react";
 
-
 // import { Inter } from 'next/font/google'
-import HeaderMenu from '@/components/HeaderMenu'
+import HeaderMenu from "@/components/HeaderMenu";
+import Welcome from "@/components/Welcome";
+import { useState } from "react";
 
 // const inter = Inter({ subsets: ['latin'] })
-
 
 const Header = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
 export default function Home() {
+  const [isUserLogged, setIsUserLogged] = useState(true);
+
   return (
     <>
       <Head>
@@ -23,18 +25,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu />
 
-      <div css={{
-        "display": "flex",
-        "flex-direction": "column",
-        "justify-content": "space-between",
-        "align-items": "center",
-        "padding": "6rem",
-        "min-height": "100vh",
-      }}>
-        <Header>LoLfans</Header>
-      </div>
+      <HeaderMenu isUserLogged={isUserLogged} />
+
+      <Welcome isUserLogged={isUserLogged} username={"Montse"} />
     </>
-  )
+  );
 }

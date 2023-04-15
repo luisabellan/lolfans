@@ -16,12 +16,12 @@ import Image from "next/image";
 import HeaderMenu from "@/components/HeaderMenu";
 
 const headStyle = tw.h1`text-3xl font-bold`;
-const Main = tw.main`flex flex-col justify-between items-center p-24`;
+const Main = tw.main`flex flex-col justify-between items-center`;
 const Header = tw.h1`text-3xl font-bold`;
 const Form = tw.form`flex flex-col`;
 const Label = tw.label`text-sm`;
 const Input = tw.input`border-2 border-gray-300 p-2 rounded-md`;
-const Button = tw.button`border-2 border-gray-300 p-2 rounded-md`;
+const Button = tw.button`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
 
 type Props = {
   onChange: (value: string) => void;
@@ -35,7 +35,6 @@ const TextInput = ({ value, onChange }: Props) => {
 
   return <input type="text" value={value} onChange={handleInputChange} />;
 };
-
 
 interface Champ {
   id: string;
@@ -97,23 +96,21 @@ export default function Champions() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu />
+      <HeaderMenu isUserLogged={false} />
       <Main>
         <Header>Search champion</Header>
         <Form onSubmit={handleSubmit}>
           <Label htmlFor="searchText">Champion:</Label>
-
           <TextInput value={searchText} onChange={handleTextChange} />
-
-          <Button type="submit" tw="bg-blue-600 p-2">
-            Search
-          </Button>
+          <Button type="submit">Search</Button>
         </Form>
-        <ul>
-          <li>Id: {champ?.id}</li>
-          <li>Name: {champ?.name}</li>
-          <li>Title: {champ?.title}</li>
-        </ul>
+        {champ && (
+          <ul>
+            <li>Id: {champ.id}</li>
+            <li>Name: {champ.name}</li>
+            <li>Title: {champ.title}</li>
+          </ul>
+        )}
       </Main>
     </>
   );

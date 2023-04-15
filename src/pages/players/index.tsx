@@ -4,6 +4,15 @@ import axios from "axios";
 import HeaderMenu from "@/components/HeaderMenu";
 import tw, { styled } from "twin.macro";
 
+
+
+
+const Main = tw.main`flex flex-col justify-between items-center`;
+const Header = tw.h1`text-3xl font-bold`;
+const Button = tw.button`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
+const Form = tw.form`flex flex-col`;
+
+
 interface PlayerInfo {
   id: string;
   name: string;
@@ -26,12 +35,12 @@ const TextInput = ({ value, onChange }: Props) => {
 
   return <input type="text" value={value} onChange={handleInputChange} />;
 };
-const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
-const Players = (props: { apiKey: string }): JSX.Element => {
+const Players = (props: { apiKey: string, isUserLogged: boolean }): JSX.Element => {
   const [searchText, setSearchText] = useState("");
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
   const RIOT_API_KEY = props.apiKey;
+  const [loggedIn, setLoggedIn] = useState(props.isUserLogged);
 
   const handleTextChange = (value: string) => {
     setSearchText(value);
@@ -42,7 +51,10 @@ const Players = (props: { apiKey: string }): JSX.Element => {
     searchPlayer();
   };
 
+
   const searchPlayer = () => {
+    // Info: {"id":"Mp_5IltAtKpEmO43FbIXlsbXf_IjTTSdkKUYTe_Zg3gr_CGggUAxXyjWfw","accountId":"t0_hcYtYJXaF2-kasNEb8iFBZAmcg3FAP4QOzVXWqwUna-Brff-MJNBU","puuid":"XPTHQKgRrnjyQCdwGKha88zxxZGAO1kkp_q3LlecYJpJW4svqnNpNOb81elE95Uhyi2OTsAEe5mcrg","name":"Fionnatad","profileIconId":5645,"revisionDate":1680693795000,"summonerLevel":75}
+
     const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${searchText}?api_key=${RIOT_API_KEY}`;
     axios
       .get(apiCallString)
@@ -55,6 +67,8 @@ const Players = (props: { apiKey: string }): JSX.Element => {
       });
   };
 
+
+
   return (
     <>
       <Head>
@@ -63,25 +77,30 @@ const Players = (props: { apiKey: string }): JSX.Element => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu />
+      <HeaderMenu isUserLogged={true} />
 
       <Main>
-        <form onSubmit={handleSubmit}>
+        <Header>Search summoner</Header>
+        <Form onSubmit={handleSubmit}>
           <label htmlFor="searchText">Summoner:</label>
           <TextInput value={searchText} onChange={handleTextChange} />
-          <p>{`You typed: ${searchText}`}</p>
-          <button type="submit" tw="bg-blue-600 p-2">
+          
+          <Button type="submit" tw="">
             Search
-          </button>
-        </form>
-        <span>Info: {JSON.stringify(playerInfo)}</span>
+          </Button>
+        </Form>
+
+
+        {/* <span>Info: {JSON.stringify(playerInfo)}</span>
         <span>name: {playerInfo.name}</span>
         <span>accountId: {playerInfo.accountId}</span>
         <span>id: {playerInfo.id}</span>
         <span>puuid: {playerInfo.puuid}</span>
         <span>profileIconId: {playerInfo.profileIconId}</span>
         <span>revisionDate: {playerInfo.revisionDate}</span>
-        <span>summonerLevel: {playerInfo.summonerLevel}</span>
+        <span>summonerLevel: {playerInfo.summonerLevel}</span> */}
+
+
       </Main>
     </>
   );
