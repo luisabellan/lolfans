@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom } from "jotai";
 
-export const userNameAtom = atom('Montse');
+export const userNameAtom = atom("Montse");
 export const isUserLoggedAtom = atom(true);
