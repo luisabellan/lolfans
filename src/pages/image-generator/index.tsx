@@ -10,6 +10,8 @@ import HeaderMenu from "@/components/HeaderMenu";
 // import { Inter } from 'next/font/google'
 import React from "react";
 import { Configuration, OpenAIApi } from "openai";
+import { useAtom } from "jotai";
+import {isUserLoggedAtom} from "@/atoms/store";
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -40,6 +42,7 @@ export default function ImageGeneration() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [text, setText] = useState("");
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
   const ImageGeneratorContainer = styled("div", {});
 
@@ -83,7 +86,7 @@ export default function ImageGeneration() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu />
+      <HeaderMenu isUserLogged={false} />
       <div>
         <h1>Generate image</h1>
 

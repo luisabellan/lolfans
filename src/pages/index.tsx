@@ -7,15 +7,15 @@ import { css } from "@emotion/react";
 // import { Inter } from 'next/font/google'
 import HeaderMenu from "@/components/HeaderMenu";
 import Welcome from "@/components/Welcome";
-import { useState } from "react";
-
+import { useAtom } from "jotai";
+import {isUserLoggedAtom} from "@/atoms/store";
 // const inter = Inter({ subsets: ['latin'] })
 
 const Header = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
 export default function Home() {
-  const [isUserLogged, setIsUserLogged] = useState(true);
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
   return (
     <>
@@ -26,9 +26,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HeaderMenu isUserLogged={isUserLogged} />
+      <HeaderMenu isUserLogged={loggedIn} />
 
-      <Welcome isUserLogged={isUserLogged} username={"Montse"} />
+      <Welcome isUserLogged={loggedIn} username={"Montse"} />
     </>
   );
 }

@@ -3,7 +3,8 @@ import { useState, ChangeEvent } from "react";
 import axios from "axios";
 import HeaderMenu from "@/components/HeaderMenu";
 import tw, { styled } from "twin.macro";
-
+import { useAtom } from "jotai";
+import {isUserLoggedAtom} from "@/atoms/store";
 
 
 
@@ -40,7 +41,7 @@ const Players = (props: { apiKey: string, isUserLogged: boolean }): JSX.Element 
   const [searchText, setSearchText] = useState("");
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
   const RIOT_API_KEY = props.apiKey;
-  const [loggedIn, setLoggedIn] = useState(props.isUserLogged);
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
   const handleTextChange = (value: string) => {
     setSearchText(value);
@@ -77,7 +78,7 @@ const Players = (props: { apiKey: string, isUserLogged: boolean }): JSX.Element 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu isUserLogged={true} />
+      <HeaderMenu isUserLogged={false} />
 
       <Main>
         <Header>Search summoner</Header>

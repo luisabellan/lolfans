@@ -2,7 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import tw, { styled } from "twin.macro";
 import { useState } from "react";
-import { redirectToLogin } from "@/utilities/riotApi";
+import { redirectToLogin } from "@/lib/riotApi";
+import { atom, useAtom } from "jotai";
+import {isUserLoggedAtom} from "@/atoms/store";
+
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -14,18 +17,16 @@ const noUnderline = {
   textDecoration: "none",
 };
 
-const handleLoginClick = () => {
-  redirectToLogin();
-};
-
+const loggedInAtom = atom(false);
 export default function HeaderMenu({
   isUserLogged,
 }: {
   isUserLogged: boolean;
 }) {
-  const [loggedIn, setLoggedIn] = useState(isUserLogged);
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
-  const handleLoginClick = () => {
+  const handleLoginClick = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
     redirectToLogin();
   };
 
@@ -60,7 +61,7 @@ export default function HeaderMenu({
         <Item>
           {/* show link to profile if isUserLogged is true*/}
 
-          {isUserLogged ? (
+          {loggedIn ? (
             <Link css={noUnderline} href="/profile">
               Profile
             </Link>
