@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import tw, { styled } from "twin.macro";
 import { useState } from "react";
-import { redirectToLogin } from "@/lib/riotApi";
 import { atom, useAtom } from "jotai";
 import {isUserLoggedAtom} from "@/atoms/store";
 
@@ -27,7 +26,6 @@ export default function HeaderMenu({
 
   const handleLoginClick = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    redirectToLogin();
   };
 
   return (

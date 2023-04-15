@@ -1,16 +1,12 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
-}
-
-generator client {
-  provider        = "prisma-client-js"
-  // previewFeatures = ["referentialActions"] // You won't need this in Prisma 3.X or higher.
-  binaryTargets = ["native"]
-  output   = "./generated/prisma-client-js"
-
-
 }
 
 model Account {
@@ -19,13 +15,15 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String?  @db.Text
+  id_token           String? @db.Text
   session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -45,7 +43,8 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
-  image         String?
+  avatar        String?
+  bio           String
   accounts      Account[]
   sessions      Session[]
 }

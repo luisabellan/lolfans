@@ -18,54 +18,7 @@ const Container = styled.div`
   `}
 `;
 
-
 const Welcome: React.FC<HeaderProps> = ({
-  isUserLogged,
-  username,
-}: HeaderProps): JSX.Element => {
-  
-
-
-// 384F-AE00
-  return (
-    <Container>
-
-      
-      <h1>Welcome to My Game App</h1>
-      {isUserLogged ? (
-        <p>Hello, {username}!</p>
-      ) : (
-        <p>Please login to see your profile</p>
-      )}
-
-    </Container>
-  );
-};
-
-/* const Welcome: React.FC<HeaderProps> = ({
-  isUserLogged,
-  username,
-}: HeaderProps): JSX.Element => {
-  
-  const { data: session } = useSession()
-
-
-  return (
-    <Container>
-
-      
-      <h1>Welcome to My Game App</h1>
-      {isUserLogged ? (
-        <p>Hello, {username}!</p>
-      ) : (
-        <p>Please login to see your profile</p>
-      )}
-
-    </Container>
-  );
-}; */
-
-/* const Welcome: React.FC<HeaderProps> = ({
   isUserLogged,
   username,
 }: HeaderProps): JSX.Element => {
@@ -82,7 +35,6 @@ const Welcome: React.FC<HeaderProps> = ({
   Not signed in <br/>
   <button onClick={() => signIn()}>Sign in</button>
   </>
-} */
-
+}
 
 export default Welcome;

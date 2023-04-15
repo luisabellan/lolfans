@@ -7,4 +7,7 @@ module.exports = withTwin({
   reactStrictMode: true,
   /** We run eslint as a separate task in CI */
   eslint: { ignoreDuringBuilds: !!process.env.CI },
+  experimental: {
+    appDir: true,
+  },
 });
