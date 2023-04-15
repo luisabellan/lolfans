@@ -50,18 +50,14 @@ const Image = styled.img`
   height: 12rem;
 `;
 
-
 const Form = tw.form`
   flex
   flex-col
   items-center
   justify-center
-
-
-`
+`;
 
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
-
 
 const ProfilePage: React.FC<ProfileProps> = () => {
   const [bio, setBio] = useState("");
@@ -70,7 +66,7 @@ const ProfilePage: React.FC<ProfileProps> = () => {
 
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [userName, setUserName] = useAtom(userNameAtom);
-  
+
   const TextInput = ({ value, onChange }: Props) => {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
