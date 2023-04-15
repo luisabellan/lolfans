@@ -1,6 +1,5 @@
 import React from "react";
 import tw, { styled } from "twin.macro";
-import { useSession, signIn, signOut } from "next-auth/react"
 
 interface HeaderProps {
   isUserLogged: boolean;
@@ -22,19 +21,16 @@ const Welcome: React.FC<HeaderProps> = ({
   isUserLogged,
   username,
 }: HeaderProps): JSX.Element => {
-
-  const { data: session } = useSession()
-  
-  if(session) {
-    return <>
-      Signed in as {session.user?.email} <br/>
-      <button onClick={() => signOut()}>Sign out</button>
-    </>
-  }
-  return <>
-  Not signed in <br/>
-  <button onClick={() => signIn()}>Sign in</button>
-  </>
-}
+  return (
+    <Container>
+      <h1>Welcome to My Game App</h1>
+      {isUserLogged ? (
+        <p>Hello, {username}!</p>
+      ) : (
+        <p>Please login to see your profile</p>
+      )}
+    </Container>
+  );
+};
 
 export default Welcome;

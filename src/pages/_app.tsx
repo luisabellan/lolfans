@@ -1,16 +1,18 @@
-import { AppProps } from "next/app";
+import { AppProps } from 'next/app';
 import GlobalStyles from "@/styles/GlobalStyles";
-import { Provider } from "jotai";
+import { Provider as StateProvider } from "jotai";
+import { SessionProvider } from "next-auth/react";
 
-import React from "react";
-
-const App = ({ Component, pageProps }: AppProps) => {
-  <GlobalStyles />;
+function App({ Component, pageProps }: AppProps) { // Changed function signature
   return (
-    <Provider>
-      <Component {...pageProps} />
-    </Provider>
+    <StateProvider>
+      <SessionProvider session={pageProps.session}>
+        <GlobalStyles />;
+        <Component {...pageProps} />
+      </SessionProvider>
+    </StateProvider>
   );
 };
+
 
 export default App;

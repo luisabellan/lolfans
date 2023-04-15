@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import tw, { styled } from "twin.macro";
 import { css } from "@emotion/react";
+import { useSession, signIn, signOut } from "next-auth/react"
+
 
 // import { Inter } from 'next/font/google'
 import HeaderMenu from "@/components/HeaderMenu";
@@ -29,6 +31,9 @@ export default function Home() {
       <HeaderMenu isUserLogged={loggedIn} />
 
       <Welcome isUserLogged={loggedIn} username={"Montse"} />
+      
     </>
   );
 }
+
+
