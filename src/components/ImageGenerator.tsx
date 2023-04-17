@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Image from "next/image";
 
 interface ImageResponse {
   data: {
@@ -42,7 +43,7 @@ export default function ImageGenerator(): JSX.Element {
         </label>
         <button type="submit">Generate Image</button>
       </form>
-      {imageUrl && <img src={imageUrl} alt="Generated Image" />}
+      {imageUrl && <Image src={imageUrl} alt="Generated Image" />}
     </div>
   );
 }

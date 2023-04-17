@@ -16,7 +16,7 @@ import {
 } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useSession, signOut } from 'next-auth/react';
-import { getPlaylistItems } from "@/utilities/youtube.js";
+import { getPlaylistItems } from "@/utils/youtube.js";
 
 
 
