@@ -19,6 +19,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { getPlaylistItems } from "@/utilities/youtube.js";
 
 
+
 const menuItems = [
   {
     label: 'Add a new game',
@@ -42,9 +43,11 @@ const menuItems = [
   },
 ];
 
-const Layout = async ({ children = null }) => {
+
+
+const Layout = async ({userName, isUserLogged, children = null }) => {
   const { data: session, status } = useSession();
-  const user = session?.user;
+  const user = session?.user || (userName && isUserLogged);
   const isLoadingUser = status === 'loading';
 
   const router = useRouter();
