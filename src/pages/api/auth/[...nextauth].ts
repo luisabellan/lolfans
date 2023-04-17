@@ -1,24 +1,39 @@
-import NextAuth from 'next-auth'
+import NextAuth from 'next-auth';
+import EmailProvider from 'next-auth/providers/email';
+import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
-import EmailProvider from 'next-auth/providers/email'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export default NextAuth({
+  pages: {
+    signIn: '/',
+    signOut: '/',
+    error: '/',
+    verifyRequest: '/',
+  },
+  
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.NEXT_PUBLIC_EMAIL_SERVER_PORT,
+        host: process.env.NEXT_PUBLIC_EMAIL_SERVER_HOST!,
+        port: parseInt(process.env.NEXT_PUBLIC_EMAIL_SERVER_PORT!),
         auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
+          user: process.env.NEXT_PUBLIC_EMAIL_SERVER_USER!,
+          pass: process.env.NEXT_PUBLIC_EMAIL_SERVER_PASSWORD!,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: process.env.NEXT_PUBLIC_EMAIL_FROM!,
       maxAge: 10 * 60, // Magic links are valid for 10 min only
     }),
+    
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
+      // redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!, // check if this is only neededd
+    }),
   ],
+  
   adapter: PrismaAdapter(prisma),
 });
