@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 
 import tw, { styled } from "twin.macro";
 
@@ -11,7 +12,7 @@ import HeaderMenu from "@/components/HeaderMenu";
 import React from "react";
 import { Configuration, OpenAIApi } from "openai";
 import { useAtom } from "jotai";
-import {isUserLoggedAtom} from "@/atoms/store";
+import { isUserLoggedAtom } from "@/atoms/store";
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -50,11 +51,11 @@ export default function ImageGeneration() {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
     };
-  
+
     return <input type="text" value={value} onChange={handleInputChange} />;
   };
   const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
-  
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
   };
@@ -77,7 +78,6 @@ export default function ImageGeneration() {
     setImageUrl(response.data.data[0].url);
   };
 
-
   return (
     <>
       <Head>
@@ -93,12 +93,18 @@ export default function ImageGeneration() {
         <form onSubmit={handleSubmit}>
           <label>
             Description:
-          <input type="text" value={description} onChange={handleChange} />
-
+            <input type="text" value={description} onChange={handleChange} />
           </label>
           <button type="submit">Generate Image</button>
         </form>
-        {imageUrl && <img width="400" height="400" src={imageUrl} alt="Generated Image" />}
+        {imageUrl && (
+          <Image
+            width={400}
+            height={400}
+            src={imageUrl}
+            alt="Generated Image"
+          />
+        )}
       </div>
     </>
   );
