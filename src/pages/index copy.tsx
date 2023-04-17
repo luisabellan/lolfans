@@ -7,16 +7,11 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { trpc } from "@/utils/trpc";
 
 // import { Inter } from 'next/font/google'
-
 import HeaderMenu from "@/components/HeaderMenu";
 import Welcome from "@/components/Welcome";
 import { useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
 // const inter = Inter({ subsets: ['latin'] })
-import Layout from '@/components/Layout';
-import Grid from '@/components/Grid';
-import games from './data.json'; // mock data, we will not need this once we have data in the database
-import { PrismaClient } from '@prisma/client';
 
 const Header = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
