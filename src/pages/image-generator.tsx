@@ -6,7 +6,6 @@ import tw, { styled } from "twin.macro";
 
 import { SetStateAction, ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import HeaderMenu from "@/components/HeaderMenu";
 // import { Inter } from 'next/font/google'
 import React from "react";
