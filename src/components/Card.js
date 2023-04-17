@@ -7,14 +7,10 @@ const Card = ({
   id = '',
   image = '',
   title = '',
-  guests = 0,
-  beds = 0,
-  baths = 0,
-  price = 0,
   favorite = false,
   onClickFavorite = () => null,
 }) => (
-  <Link href={`/games/${id}`}>
+  <Link href={`/homes/${id}`}>
     <a className="block w-full">
       <div className="relative">
         <div className="bg-gray-200 rounded-lg shadow overflow-hidden aspect-w-16 aspect-h-9">
@@ -48,7 +44,7 @@ const Card = ({
       <div className="mt-2 w-full text-gray-700 font-semibold leading-tight">
         {title ?? ''}
       </div>
-      <ol className="mt-1 inline-flex items-center space-x-1 text-gray-500">
+      {/* <ol className="mt-1 inline-flex items-center space-x-1 text-gray-500">
         <li>
           <span>{guests ?? 0} guests</span>
           <span aria-hidden="true"> · </span>
@@ -60,14 +56,14 @@ const Card = ({
         <li>
           <span>{baths ?? 0} baths</span>
         </li>
-      </ol>
-      <p className="mt-2">
+      </ol> */}
+      {/* <p className="mt-2">
         {new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
         }).format(price ?? 0)}{' '}
         <span className="text-gray-500">/night</span>
-      </p>
+      </p> */}
     </a>
   </Link>
 );
@@ -77,10 +73,6 @@ Card.propTypes = {
   image: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
-  guests: PropTypes.number,
-  beds: PropTypes.number,
-  baths: PropTypes.number,
-  price: PropTypes.number,
   favorite: PropTypes.bool,
   onClickFavorite: PropTypes.func,
 };

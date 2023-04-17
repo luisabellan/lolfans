@@ -21,7 +21,7 @@ import { getPlaylistItems } from "@/utilities/youtube.js";
 
 const menuItems = [
   {
-    label: 'List a new game',
+    label: 'Add a new game',
     icon: PlusIcon,
     href: '/list',
   },
@@ -64,7 +64,7 @@ const Layout = async ({ children = null }) => {
   return (
     <>
       <Head>
-        <title>LoLFan | The Modern Dev</title>
+        <title>LoLFan</title>
         <meta
           name="title"
           content="Learn how to Build a Fullstack App with Next.js, PlanetScale & Prisma | The Modern Dev"

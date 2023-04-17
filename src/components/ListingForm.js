@@ -11,10 +11,6 @@ import axios from 'axios';
 const ListingSchema = Yup.object().shape({
   title: Yup.string().trim().required(),
   description: Yup.string().trim().required(),
-  price: Yup.number().positive().integer().min(1).required(),
-  guests: Yup.number().positive().integer().min(1).required(),
-  beds: Yup.number().positive().integer().min(1).required(),
-  baths: Yup.number().positive().integer().min(1).required(),
 });
 
 const ListingForm = ({
@@ -71,10 +67,6 @@ const ListingForm = ({
     image: '',
     title: '',
     description: '',
-    price: 0,
-    guests: 1,
-    beds: 1,
-    baths: 1,
   };
 
   return (
@@ -112,41 +104,6 @@ const ListingForm = ({
                 rows={5}
               />
 
-              <Input
-                name="price"
-                type="number"
-                min="0"
-                label="Price per night"
-                placeholder="100"
-                disabled={disabled}
-              />
-
-              <div className="flex space-x-4">
-                <Input
-                  name="guests"
-                  type="number"
-                  min="0"
-                  label="Guests"
-                  placeholder="2"
-                  disabled={disabled}
-                />
-                <Input
-                  name="beds"
-                  type="number"
-                  min="0"
-                  label="Beds"
-                  placeholder="1"
-                  disabled={disabled}
-                />
-                <Input
-                  name="baths"
-                  type="number"
-                  min="0"
-                  label="Baths"
-                  placeholder="1"
-                  disabled={disabled}
-                />
-              </div>
             </div>
 
             <div className="flex justify-end">
@@ -170,10 +127,6 @@ ListingForm.propTypes = {
     image: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
-    price: PropTypes.number,
-    guests: PropTypes.number,
-    beds: PropTypes.number,
-    baths: PropTypes.number,
   }),
   redirectPath: PropTypes.string,
   buttonText: PropTypes.string,
