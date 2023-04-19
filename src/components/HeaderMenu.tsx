@@ -4,6 +4,8 @@ import tw, { styled } from "twin.macro";
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
+import useHistory from "next/router";
+import router from "next/router";
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -26,6 +28,11 @@ export default function HeaderMenu({
   const handleLoginClick = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoggedIn(!loggedIn);
+
+    // if not logged in, redirect to home
+    if (!loggedIn) {
+      router.push("/");
+    }
   };
 
   return (
