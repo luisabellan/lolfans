@@ -56,7 +56,7 @@ export default function HeaderMenu({
             Champions
           </Link>
         </Item>
-        {!loggedIn ? (
+        {loggedIn ? (
           <Item>
             <Link css={noUnderline} href="/profile">
               Profile
