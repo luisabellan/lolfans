@@ -29,7 +29,6 @@ export default function HeaderMenu({
     e.preventDefault();
     setLoggedIn(!loggedIn);
 
-    // if not logged in, redirect to home
     if (!loggedIn) {
       router.push("/");
     }
