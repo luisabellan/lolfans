@@ -1,6 +1,6 @@
 
 
-## Genie
+
 
 The error message is related to the `GoogleProvider` configuration object. The issue is that the `redirectUri` property in this object doesn't exist in the `OAuthUserConfig` type which it is supposed to conform to. 
 
@@ -23,11 +23,8 @@ GoogleProvider(options);
 
 By creating the `options` object, which only contains properties that are recognized by the `GoogleProvider`, we can avoid the TypeScript error.
 
-## You
 
-how can I fetch youtube videos from a particular channel to display in a Nextjs app
 
-## Genie
 
 To fetch YouTube videos from a particular channel and display them in a Next.js app, you can use the YouTube Data API v3. Here is an example of how to do it:
 

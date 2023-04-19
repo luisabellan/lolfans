@@ -3,8 +3,7 @@ import Image from "next/image";
 import tw, { styled } from "twin.macro";
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
-import {isUserLoggedAtom} from "@/atoms/store";
-
+import { isUserLoggedAtom } from "@/atoms/store";
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -24,8 +23,9 @@ export default function HeaderMenu({
 }) {
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
-  const handleLoginClick = (e: { preventDefault: () => void; }) => {
+  const handleLoginClick = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setLoggedIn(!loggedIn);
   };
 
   return (
@@ -56,32 +56,28 @@ export default function HeaderMenu({
             Champions
           </Link>
         </Item>
-        <Item>
-          {/* show link to profile if isUserLogged is true*/}
-
-          {loggedIn ? (
+        {!loggedIn ? (
+          <Item>
             <Link css={noUnderline} href="/profile">
               Profile
             </Link>
-          ) : (
+          </Item>
+        ) : null}
+
+        {!loggedIn ? (
+          <Item>
+            {/* show link to profile if isUserLogged is true*/}
             <Link css={noUnderline} href="/login">
               <Button onClick={handleLoginClick}>Login</Button>
             </Link>
-          )}
-          {/* Uncomment this once authentication is implemented
-            
-            ( <Link css={noUnderline} href="/login"> // create login page
-              <Button onClick={() => setLoggedIn(!loggedIn)}>
-              Login
-              </Button>
-            </Link>) 
-          <Button onClick={() => setLoggedIn(!loggedIn)}>
-              Login
-              </Button>
-          )
-          
-          */}
-        </Item>
+          </Item>
+        ) : (
+          <Item>
+            <Link css={noUnderline} href="/logout">
+              <Button onClick={handleLoginClick}>Logout</Button>
+            </Link>
+          </Item>
+        )}
       </Links>
     </Container>
   );

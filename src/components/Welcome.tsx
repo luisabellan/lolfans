@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 interface HeaderProps {
   isUserLogged: boolean;
-  username: string;
+  userName: string;
 }
 
 const Container = styled.div`
@@ -20,13 +20,13 @@ const Container = styled.div`
 
 const Welcome: React.FC<HeaderProps> = ({
   isUserLogged,
-  username,
+  userName,
 }: HeaderProps): JSX.Element => {
   return (
     <Container>
       <h1>Welcome to My Game App</h1>
       {isUserLogged ? (
-        <p>Hello, {username}!</p>
+        <p>Hello, {userName}!</p>
       ) : (
         <p>Please login to see your profile</p>
       )}
