@@ -24,11 +24,11 @@ const Welcome: React.FC<HeaderProps> = ({
 }: HeaderProps): JSX.Element => {
   return (
     <Container>
-      <h1>Welcome to My Game App</h1>
+      <h1 tw="mt-16">Welcome to My Game App</h1>
       {isUserLogged ? (
-        <p>Hello, {userName}!</p>
+        <p tw="mt-2">Hello, {userName}!</p>
       ) : (
-        <p>Please login to see your profile</p>
+        <p tw="mt-2">Please login to see your profile</p>
       )}
     </Container>
   );

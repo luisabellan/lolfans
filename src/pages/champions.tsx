@@ -42,7 +42,7 @@ export default function Champions() {
       </Head>
       <HeaderMenu isUserLogged={false} />
       <Main>
-        <Header>Search champion</Header>
+        <Header  tw="mt-16">Search champion</Header>
         <Formik
           initialValues={{ searchText: "" }}
           validationSchema={Yup.object({

@@ -64,7 +64,7 @@ const Players = (props: Props): JSX.Element => {
       <HeaderMenu isUserLogged={false} />
 
       <Main>
-        <Header>Search summoner</Header>
+        <Header tw="mt-16">Search summoner</Header>
         <Formik
           initialValues={{
             summonerName: "",
