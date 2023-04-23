@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import tw from "twin.macro";
+import css from "twin.macro";
 import styled from "twin.macro"
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
