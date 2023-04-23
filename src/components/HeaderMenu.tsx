@@ -88,7 +88,7 @@ export default function HeaderMenu() {
               API
             </Link>
           </Item>
-          {session && session.user && session.user?.role === "admin" ? (
+          {session && session.user && session.user?.email === "luis.abellan.dev@gmail.com" ? (
           <Item>
             <Link href="/me">
               Admin
