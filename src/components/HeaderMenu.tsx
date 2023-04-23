@@ -1,8 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import tw from "twin.macro";
-import css from "twin.macro";
-import styled from "twin.macro"
+import tw, { css, styled, theme } from 'twin.macro'
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
@@ -16,14 +14,13 @@ const Links = tw.ul`flex flex-row justify-end items-center`;
 const ImageContainer = tw.div`w-9/12`;
 const Container = tw.div`flex flex-row justify-between items-center  h-16`;
 const Button = tw.button`bg-blue-500 py-2 hover:bg-blue-700 text-white font-bold px-4 rounded`;
-
-const noUnderline = {
-  textDecoration: "none",
-};
+const StyledLink = styled(Link)`
+  ${tw`text-white font-bold no-underline`}
+`;
 
 const loggedInAtom = atom(false);
 export default function HeaderMenu() {
-  // const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
+  // const [loggedIn,noUnderline setLoggedIn] = useAtom(isUserLoggedAtom);
   const { data: session, status } = useSession()
   const loading = status === "loading"
   const handleLogIn = (e: { preventDefault: () => void }) => {
