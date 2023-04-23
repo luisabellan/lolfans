@@ -1,4 +1,6 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
+import NextAuth from 'next-auth';
+import { NextAuthOptions } from 'next-auth/types';
+
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
@@ -7,7 +9,6 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
-
   /* pages: {
     signIn: '/',
     signOut: '/',
@@ -39,16 +40,13 @@ export const authOptions: NextAuthOptions = {
     colorScheme: "light",
   },
   callbacks: {
-    async jwt({token:any }) {
+    async jwt({token}) {
       token.userRole = "admin"
       return token
     },
+  },
   
   adapter: PrismaAdapter(prisma),
-  }
 }
 
-
-
-export default NextAuth(authOptions)
-
+export default NextAuth(authOptions);

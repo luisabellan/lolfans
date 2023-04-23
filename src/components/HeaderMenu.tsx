@@ -80,7 +80,20 @@ export default function HeaderMenu() {
           </Item>
         ) : null}
 
-        {!session ? (
+          <Item>
+            <Link css={noUnderline} href="/api-example">
+              API
+            </Link>
+          </Item>
+          {session?.user === "admin" ? (
+          <Item>
+            <Link css={noUnderline} href="/me">
+              Admin
+            </Link>
+          </Item>
+        ) : null}
+
+        {!session?.user ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
             <Link css={noUnderline} href="/login">

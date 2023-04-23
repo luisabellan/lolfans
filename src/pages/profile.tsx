@@ -122,8 +122,8 @@ const ProfilePage: React.FC<ProfileProps> = () => {
 
   // If no session exists, display access denied message
   return (
-    <Layout isUserLogged={loggedIn}>
-      {!loggedIn ? <AccessDenied /> : (
+    <Layout>
+      {!session?.user ? <AccessDenied /> : (
 
         <Content>
           <h1>Profile</h1>

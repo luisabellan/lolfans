@@ -28,8 +28,9 @@ import Welcome from "@/components/Welcome";
 import { useAtom, atom} from "jotai";
 import { isUserLoggedAtom, userNameAtom} from "@/atoms/store";
 // const inter = Inter({ subsets: ['latin'] })
+import Post, { PostProps } from "@/components/Post";
 
-export default function Home({games = []}) {
+export default function Home({games = [], posts = []}) {
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [name, setName] = useAtom(userNameAtom);
 
@@ -37,10 +38,15 @@ export default function Home({games = []}) {
   const result = trpc.hello.useQuery({ text: "client" });
 
   return (
-    <Layout isUserLogged={loggedIn} >
+    <Layout>
       <Welcome isUserLogged={loggedIn} userName={name} />
       <div className="mt-8">
         <Grid games={games} />
+        {posts.map((post) => (
+            <div key={post.id} className="post">
+              <Post post={post} />
+            </div>
+          ))}
       </div>
     </Layout>
   );
