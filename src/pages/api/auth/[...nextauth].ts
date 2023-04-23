@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth';
-import { NextAuthOptions } from 'next-auth/types';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+
 
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
@@ -7,6 +7,21 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient();
+const options = {
+  clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
+  authorizationParams: {
+    response_type: "code",
+    scope: "openid profile email",
+  },
+  redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!
+}
+
+
+interface AuthorizationConfig {
+  response_type: string;
+  scope: string;
+}
 
 export const authOptions: NextAuthOptions = {
   /* pages: {
@@ -15,7 +30,7 @@ export const authOptions: NextAuthOptions = {
     error: '/',
     verifyRequest: '/',
   }, */
-  
+
   providers: [
     EmailProvider({
       server: {
@@ -29,23 +44,27 @@ export const authOptions: NextAuthOptions = {
       from: process.env.NEXT_PUBLIC_EMAIL_FROM!,
       maxAge: 10 * 60, // Magic links are valid for 10 min only
     }),
-    
+
     GoogleProvider({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
-      // redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!, // check if this is only neededd
+      authorization: {
+        response_type: "code",
+        scope: "openid profile email",
+      } as AuthorizationConfig,
+      redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!
     }),
   ],
   theme: {
     colorScheme: "light",
   },
   callbacks: {
-    async jwt({token}) {
+    async jwt({ token }) {
       token.userRole = "admin"
       return token
     },
   },
-  
+
   adapter: PrismaAdapter(prisma),
 }
 

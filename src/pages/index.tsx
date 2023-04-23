@@ -33,6 +33,7 @@ import Post, { PostProps } from "@/components/Post";
 export default function Home({games = [], posts = []}) {
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [name, setName] = useAtom(userNameAtom);
+  const { data } = useSession()
 
   // 💡 Tip: CMD+Click (or CTRL+Click) on `greeting` to go to the server definition
   const result = trpc.hello.useQuery({ text: "client" });

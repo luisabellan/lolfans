@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
+import styled from "twin.macro"
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
