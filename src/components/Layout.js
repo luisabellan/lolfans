@@ -10,7 +10,7 @@ import { useSession, signOut } from "next-auth/react";
 import HeaderMenu from "./HeaderMenu";
 import Welcome from "./Welcome";
 
-export default function Layout({ isUserLogged, children }) {
+export default function Layout({ children }) {
   return (
     <>
       <Head>
@@ -20,7 +20,7 @@ export default function Layout({ isUserLogged, children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HeaderMenu isUserLogged={isUserLogged} />
+      <HeaderMenu />
 
       {/**
            * The type is defined and can be autocompleted
@@ -31,7 +31,7 @@ export default function Layout({ isUserLogged, children }) {
     
            {result.data ? (<h2>{result.data.greeting}</h2>) : (<h2>Loading...</h2>)}
         */}
-      {children}
+      <main>{children}</main>
     </>
   );
 }

@@ -6,6 +6,8 @@ import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
 import useHistory from "next/router";
 import router from "next/router";
+import { signIn, signOut, useSession } from "next-auth/react"
+
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -18,18 +20,26 @@ const noUnderline = {
 };
 
 const loggedInAtom = atom(false);
-export default function HeaderMenu({
-  isUserLogged,
-}: {
-  isUserLogged: boolean;
-}) {
-  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
-
-  const handleLoginClick = (e: { preventDefault: () => void }) => {
+export default function HeaderMenu() {
+  // const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
+  const handleLogIn = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setLoggedIn(!loggedIn);
+    // setLoggedIn(!loggedIn);
+    signIn()
 
-    if (!loggedIn) {
+    if (!session) {
+      router.push("/");
+    }
+  };
+
+  const handleLogOut = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    // setLoggedIn(!loggedIn);
+    signOut()
+
+    if (!session) {
       router.push("/");
     }
   };
@@ -62,7 +72,7 @@ export default function HeaderMenu({
             Champions
           </Link>
         </Item>
-        {loggedIn ? (
+        {session ? (
           <Item>
             <Link css={noUnderline} href="/profile">
               Profile
@@ -70,17 +80,17 @@ export default function HeaderMenu({
           </Item>
         ) : null}
 
-        {!loggedIn ? (
+        {!session ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
             <Link css={noUnderline} href="/login">
-              <Button onClick={handleLoginClick}>Login</Button>
+              <Button onClick={handleLogIn}>Login</Button>
             </Link>
           </Item>
         ) : (
           <Item>
             <Link css={noUnderline} href="/logout">
-              <Button onClick={handleLoginClick}>Logout</Button>
+              <Button onClick={handleLogOut}>Logout</Button>
             </Link>
           </Item>
         )}
