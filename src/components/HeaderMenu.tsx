@@ -1,13 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import tw, { css, theme } from 'twin.macro'
 import { useState } from "react";
-import { atom, useAtom } from "jotai";
-import { isUserLoggedAtom } from "@/atoms/store";
-import useHistory from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react";
+import tw, { css, styled } from 'twin.macro';
 import router from "next/router";
-import { signIn, signOut, useSession } from "next-auth/react"
-
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -19,29 +15,28 @@ const noUnderline = {
   textDecoration: "none",
 };
 
-const loggedInAtom = atom(false);
 export default function HeaderMenu() {
-  // const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
-  const { data: session, status } = useSession()
-  const loading = status === "loading"
-  const handleLogIn = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    // setLoggedIn(!loggedIn);
-    signIn()
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
-    if (!session) {
-      router.push("/");
-    }
+  const handleLogIn = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    signIn("credentials").then(() => {
+      // onSuccess callback
+      if (session) {
+        router.push("/"); // redirect after successful login
+      }
+    });
   };
 
-  const handleLogOut = (e: { preventDefault: () => void }) => {
+  const handleLogOut = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    // setLoggedIn(!loggedIn);
-    signOut()
-
-    if (!session) {
-      router.push("/");
-    }
+    signOut().then(() => {
+      // onSuccess callback
+      if (!session) {
+        router.push("/"); // redirect after successful logout
+      }
+    });
   };
 
   return (
@@ -58,36 +53,36 @@ export default function HeaderMenu() {
       </ImageContainer>
       <Links>
         <Item>
-          <Link css={noUnderline} href="/">
+          <Link href="/">
             Home
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/players">
+          <Link href="/players">
             Players
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/champions">
+          <Link href="/champions">
             Champions
           </Link>
         </Item>
         {session ? (
           <Item>
-            <Link css={noUnderline} href="/profile">
+            <Link href="/profile">
               Profile
             </Link>
           </Item>
         ) : null}
 
           <Item>
-            <Link css={noUnderline} href="/api-example">
+            <Link href="/api-example">
               API
             </Link>
           </Item>
-          {session?.user === "admin" ? (
+          {(session?.user as string) === "admin" ? (
           <Item>
-            <Link css={noUnderline} href="/me">
+            <Link href="/me">
               Admin
             </Link>
           </Item>
@@ -96,13 +91,13 @@ export default function HeaderMenu() {
         {!session?.user ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
-            <Link css={noUnderline} href="/login">
+            <Link href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>
           </Item>
         ) : (
           <Item>
-            <Link css={noUnderline} href="/logout">
+            <Link href="/logout">
               <Button onClick={handleLogOut}>Logout</Button>
             </Link>
           </Item>
