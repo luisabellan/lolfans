@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -14,6 +15,13 @@ const Button = tw.button`bg-blue-500 py-2 hover:bg-blue-700 text-white font-bold
 const noUnderline = {
   textDecoration: "none",
 };
+
+interface User {
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+  role?: string | null | undefined;
+}
 
 export default function HeaderMenu() {
   const { data: session, status } = useSession();
@@ -67,7 +75,7 @@ export default function HeaderMenu() {
             Champions
           </Link>
         </Item>
-        {session ? (
+        {session?.user ? (
           <Item>
             <Link href="/profile">
               Profile
@@ -80,7 +88,7 @@ export default function HeaderMenu() {
               API
             </Link>
           </Item>
-          {(session?.user as string) === "admin" ? (
+          {session && session.user && session.user?.role === "admin" ? (
           <Item>
             <Link href="/me">
               Admin
@@ -90,7 +98,6 @@ export default function HeaderMenu() {
 
         {!session?.user ? (
           <Item>
-            {/* show link to profile if isUserLogged is true*/}
             <Link href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>

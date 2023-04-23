@@ -28,7 +28,7 @@
       "@/*": ["src/*", "./supabase-js.d.ts"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "twin.d.ts"],
   "exclude": ["node_modules"],
   "types": ["types", "react/next"]
 }
