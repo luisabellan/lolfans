@@ -57,51 +57,44 @@ export default function HeaderMenu() {
       </ImageContainer>
       <Links>
         <Item>
-          <Link css={noUnderline} href="/">
+          <StyledLink href="/">
             Home
-          </Link>
+          </StyledLink>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/players">
+          <StyledLink href="/players">
             Players
-          </Link>
+          </StyledLink>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/champions">
+          <StyledLink href="/champions">
             Champions
-          </Link>
+          </StyledLink>
         </Item>
         {session ? (
           <Item>
-            <Link css={noUnderline} href="/profile">
+            <StyledLink href="/profile">
               Profile
-            </Link>
+            </StyledLink>
           </Item>
         ) : null}
 
-          <Item>
-            <Link css={noUnderline} href="/api-example">
-              API
-            </Link>
-          </Item>
-          {session?.user === "admin" ? (
-          <Item>
-            <Link css={noUnderline} href="/me">
-              Admin
-            </Link>
-          </Item>
-        ) : null}
+        <Item>
+          <StyledLink href="/me">
+            {session?.user?.name === "admin" ? "Admin Panel" : "My Profile"}
+          </StyledLink>
+        </Item>
 
         {!session?.user ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
-            <Link css={noUnderline} href="/login">
+            <Link href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>
           </Item>
         ) : (
           <Item>
-            <Link css={noUnderline} href="/logout">
+            <Link href="/logout">
               <Button onClick={handleLogOut}>Logout</Button>
             </Link>
           </Item>
