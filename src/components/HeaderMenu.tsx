@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import tw, { css, styled, theme } from 'twin.macro'
+import tw, { css, theme } from 'twin.macro'
 import { useState } from "react";
 import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
@@ -14,13 +14,14 @@ const Links = tw.ul`flex flex-row justify-end items-center`;
 const ImageContainer = tw.div`w-9/12`;
 const Container = tw.div`flex flex-row justify-between items-center  h-16`;
 const Button = tw.button`bg-blue-500 py-2 hover:bg-blue-700 text-white font-bold px-4 rounded`;
-const StyledLink = styled(Link)`
-  ${tw`text-white font-bold no-underline`}
-`;
+
+const noUnderline = {
+  textDecoration: "none",
+};
 
 const loggedInAtom = atom(false);
 export default function HeaderMenu() {
-  // const [loggedIn,noUnderline setLoggedIn] = useAtom(isUserLoggedAtom);
+  // const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const { data: session, status } = useSession()
   const loading = status === "loading"
   const handleLogIn = (e: { preventDefault: () => void }) => {
@@ -57,44 +58,51 @@ export default function HeaderMenu() {
       </ImageContainer>
       <Links>
         <Item>
-          <StyledLink href="/">
+          <Link css={noUnderline} href="/">
             Home
-          </StyledLink>
+          </Link>
         </Item>
         <Item>
-          <StyledLink href="/players">
+          <Link css={noUnderline} href="/players">
             Players
-          </StyledLink>
+          </Link>
         </Item>
         <Item>
-          <StyledLink href="/champions">
+          <Link css={noUnderline} href="/champions">
             Champions
-          </StyledLink>
+          </Link>
         </Item>
         {session ? (
           <Item>
-            <StyledLink href="/profile">
+            <Link css={noUnderline} href="/profile">
               Profile
-            </StyledLink>
+            </Link>
           </Item>
         ) : null}
 
-        <Item>
-          <StyledLink href="/me">
-            {session?.user?.name === "admin" ? "Admin Panel" : "My Profile"}
-          </StyledLink>
-        </Item>
+          <Item>
+            <Link css={noUnderline} href="/api-example">
+              API
+            </Link>
+          </Item>
+          {session?.user === "admin" ? (
+          <Item>
+            <Link css={noUnderline} href="/me">
+              Admin
+            </Link>
+          </Item>
+        ) : null}
 
         {!session?.user ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
-            <Link href="/login">
+            <Link css={noUnderline} href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>
           </Item>
         ) : (
           <Item>
-            <Link href="/logout">
+            <Link css={noUnderline} href="/logout">
               <Button onClick={handleLogOut}>Logout</Button>
             </Link>
           </Item>
