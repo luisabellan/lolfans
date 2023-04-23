@@ -29,7 +29,7 @@ export default function HeaderMenu() {
 
   const handleLogIn = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    signIn("credentials").then(() => {
+    signIn().then(() => {
       // onSuccess callback
       if (session) {
         router.push("/"); // redirect after successful login
