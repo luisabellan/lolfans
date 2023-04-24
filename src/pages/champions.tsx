@@ -1,34 +1,90 @@
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+  ChangeEvent,
+} from "react";
+
 import Head from "next/head";
 import Link from "next/link";
-import tw from "twin.macro";
+import tw, { styled } from "twin.macro";
+import { css } from "@emotion/react";
+
 import axios from "axios";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import Image from "next/image";
 import HeaderMenu from "@/components/HeaderMenu";
 
+const headStyle = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center`;
 const Header = tw.h1`text-3xl font-bold`;
-const FormContainer = tw.div`max-w-md`;
-const TextInput = tw(Field)`px-4 py-2 border rounded w-full my-2`;
-const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
+const Form = tw.form`flex flex-col`;
+const Label = tw.label`text-sm`;
+const Input = tw.input`border-2 border-gray-300 p-2 rounded-md`;
+const Button = tw.button`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
+
+type Props = {
+  onChange: (value: string) => void;
+  value: string;
+};
+
+const TextInput = ({ value, onChange }: Props) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+  };
+
+  return <input type="text" value={value} onChange={handleInputChange} />;
+};
 
 interface Champ {
   id: string;
   name: string;
   title: string;
+  stats: {};
+  tags: [];
+  image: {
+    full: string;
+  };
+  blurb: string;
+  lore: string;
 }
 
 export default function Champions() {
+  const [searchText, setSearchText] = useState("");
+  const [champ, setChamp] = useState<Champ | null>(null);
+
+  const handleSubmit = (event: { target: any; preventDefault: () => void }) => {
+    event.preventDefault();
+    getChampByName(searchText);
+  };
+
+  const handleTextChange = (value: string) => {
+    setSearchText(value);
+  };
+
+  const formatName = (name: string): string => {
+    const [firstName, lastName] = name.split(" ");
+
+    if (lastName) {
+      const output = capitalize(firstName) + capitalize(lastName);
+      return output;
+    }
+
+    return capitalize(name);
+  };
+
+  const capitalize = (word: string): string =>
+    `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`;
+
   const getChampByName = async (name: string) => {
-    const formattedName = _.startCase(_.toLower(name));
+    const formattedName = formatName(name);
     const champData = `http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/${formattedName}.json`;
 
     try {
       const res = await axios.get(champData);
-      return res.data.data[formattedName];
+      setChamp(res.data.data[formattedName]);
     } catch (e) {
       console.error(e);
-      return null;
     }
   };
 
@@ -40,45 +96,29 @@ export default function Champions() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu isUserLogged={false} />
+      <HeaderMenu />
       <Main>
-        <Header  tw="mt-16">Search champion</Header>
-        <Formik
-          initialValues={{ searchText: "" }}
-          validationSchema={Yup.object({
-            searchText: Yup.string().required("Required"),
-          })}
-          onSubmit={async (values, { setSubmitting, setFieldError }) => {
-            const champ = await getChampByName(values.searchText);
-
-            if (champ) {
-              setFieldValue("searchText", "");
-              alert(`Champion ${champ.name} found!`);
-            } else {
-              setFieldError("searchText", "Champion not found");
-            }
-
-            setSubmitting(false);
-          }}
-        >
-          {({ isSubmitting }) => (
-            <FormContainer>
-              <Form>
-                
-                <TextInput type="text" name="searchText"  />
-                <ErrorMessage name="searchText">{(msg) => <div tw="text-red-500 text-sm">{msg}</div>}</ErrorMessage>
-                <Button type="submit" disabled={isSubmitting}>
-                Search
-              </Button>
-              </Form>
-            </FormContainer>
-          )}
-        </Formik>
+        <Header>Search champion</Header>
+        <Form onSubmit={handleSubmit}>
+          <TextInput value={searchText} onChange={handleTextChange} />
+          <Button type="submit">Search</Button>
+        </Form>
+        {champ ?  (
+          <ul>
+            <li>Id: {champ.id}</li>
+            <li>Name: {champ.name}</li>
+            <li>Title: {champ.title}</li>
+          </ul>
+        ) : null}
       </Main>
     </>
   );
 }
-function setFieldValue(arg0: string, arg1: string) {
-  throw new Error("Function not implemented.");
-}
 
+export async function getStaticProps() {
+  return {
+    props: {
+      apiKey: process.env.NEXT_PUBLIC_RIOT_API_KEY ?? "",
+    },
+  };
+}
