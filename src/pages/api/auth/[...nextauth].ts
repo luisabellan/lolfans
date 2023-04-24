@@ -1,6 +1,5 @@
 // Importing the NextAuth module, NextAuthOptions type and email & google provider modules from next-auth 
 import NextAuth from "next-auth"
-import { Session, User } from 'next-auth'
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
 
