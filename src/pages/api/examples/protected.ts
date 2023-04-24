@@ -1,5 +1,5 @@
 // This is an example of to protect an API route
-import { getSession } from "next-auth/next"
+import getSession from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]";
 
 import type { NextApiRequest, NextApiResponse } from "next"
