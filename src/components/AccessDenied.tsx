@@ -11,10 +11,10 @@ export default function AccessDenied() {
           onClick={(e) => {
             e.preventDefault()
             signIn()
-          }}
-        />
+          }} 
+        >
           You must be signed in to view this page
-        </a>
+        </Link>
       </p>
     </>
   )
