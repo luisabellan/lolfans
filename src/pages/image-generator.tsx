@@ -98,7 +98,7 @@ export default function ImageGeneration() {
           </label>
           <button type="submit">Generate Image</button>
         </form>
-        {imageUrl && <img width="400" height="400" src={imageUrl} alt="Generated Image" />}
+        {imageUrl && <Image width="400" height="400" src={imageUrl} alt="Generated Image" />}
       </div>
     </>
   );

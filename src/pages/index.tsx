@@ -15,10 +15,12 @@ const prisma = new PrismaClient();
 export async function getServerSideProps() {
   // Get all games
   const games = await prisma.game.findMany();
+  const posts = await prisma.post.findMany();
   // Pass the data to the Games page
   return {
     props: {
       games: JSON.parse(JSON.stringify(games)),
+      posts: JSON.parse(JSON.stringify(posts)),
     },
   };
 }
