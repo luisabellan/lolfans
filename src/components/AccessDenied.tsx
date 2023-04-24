@@ -12,7 +12,7 @@ export default function AccessDenied() {
             e.preventDefault()
             signIn()
           }}
-        >
+        />
           You must be signed in to view this page
         </a>
       </p>
