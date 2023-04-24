@@ -1,4 +1,6 @@
 import NextAuth from 'next-auth';
+import { NextAuthOptions } from 'next-auth/types';
+
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
@@ -6,13 +8,13 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient();
 
-export default NextAuth({
-  pages: {
+export const authOptions: NextAuthOptions = {
+  /* pages: {
     signIn: '/',
     signOut: '/',
     error: '/',
     verifyRequest: '/',
-  },
+  }, */
   
   providers: [
     EmailProvider({
@@ -34,6 +36,17 @@ export default NextAuth({
       // redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!, // check if this is only neededd
     }),
   ],
+  theme: {
+    colorScheme: "light",
+  },
+  callbacks: {
+    async jwt({token}) {
+      token.userRole = "admin"
+      return token
+    },
+  },
   
   adapter: PrismaAdapter(prisma),
-});
+}
+
+export default NextAuth(authOptions);
