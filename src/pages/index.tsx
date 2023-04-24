@@ -8,6 +8,13 @@ import { trpc } from "@/utils/trpc";
 import Layout from "@/components/Layout";
 import Grid from "@/components/Grid";
 import games from "./data.json"; // mock data, we will not need this once we have data in the database
+// import { Inter } from 'next/font/google'
+import HeaderMenu from "@/components/HeaderMenu";
+import Welcome from "@/components/Welcome";
+import { useAtom, atom} from "jotai";
+import { isUserLoggedAtom, userNameAtom} from "@/atoms/store";
+// const inter = Inter({ subsets: ['latin'] })
+import Post, { PostProps } from "@/components/Post";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -24,22 +31,15 @@ export async function getServerSideProps() {
     },
   };
 }
-// import { Inter } from 'next/font/google'
-import HeaderMenu from "@/components/HeaderMenu";
-import Welcome from "@/components/Welcome";
-import { useAtom, atom} from "jotai";
-import { isUserLoggedAtom, userNameAtom} from "@/atoms/store";
-// const inter = Inter({ subsets: ['latin'] })
-import Post, { PostProps } from "@/components/Post";
 
 export default function Home({games = [], posts = []}) {
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [name, setName] = useAtom(userNameAtom);
   const { data } = useSession()
-
+  
   // 💡 Tip: CMD+Click (or CTRL+Click) on `greeting` to go to the server definition
   const result = trpc.hello.useQuery({ text: "client" });
-
+  
   return (
     <Layout>
       <Welcome isUserLogged={loggedIn} userName={name} />

@@ -22,6 +22,9 @@ dependencies:
   '@next-auth/prisma-adapter':
     specifier: ^1.0.5
     version: 1.0.5(@prisma/client@4.13.0)(next-auth@4.22.0)
+  '@prisma/client':
+    specifier: 4.13.0
+    version: 4.13.0(prisma@4.13.0)
   '@supabase/auth-helpers-nextjs':
     specifier: ^0.5.6
     version: 0.5.6(@supabase/supabase-js@2.20.0)
@@ -100,9 +103,6 @@ dependencies:
   openai:
     specifier: ^3.2.1
     version: 3.2.1
-  prisma:
-    specifier: ^4.13.0
-    version: 4.13.0
   prop-types:
     specifier: ^15.8.1
     version: 15.8.1
@@ -141,9 +141,6 @@ devDependencies:
   '@emotion/babel-plugin':
     specifier: ^11.10.5
     version: 11.10.5(@babel/core@7.21.3)
-  '@prisma/client':
-    specifier: ^4.13.0
-    version: 4.13.0(prisma@4.13.0)
   '@tailwindcss/aspect-ratio':
     specifier: ^0.4.0
     version: 0.4.0(tailwindcss@3.3.1)
@@ -177,6 +174,9 @@ devDependencies:
   prettier:
     specifier: ^2.7.1
     version: 2.7.1
+  prisma:
+    specifier: 4.13.0
+    version: 4.13.0
   tailwindcss:
     specifier: ^3.3.1
     version: 3.3.1(postcss@8.4.21)
@@ -1001,9 +1001,11 @@ packages:
     dependencies:
       '@prisma/engines-version': 4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a
       prisma: 4.13.0
+    dev: false
 
   /@prisma/engines-version@4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a:
     resolution: {integrity: sha512-fsQlbkhPJf08JOzKoyoD9atdUijuGBekwoOPZC3YOygXEml1MTtgXVpnUNchQlRSY82OQ6pSGQ9PxUe4arcSLQ==}
+    dev: false
 
   /@prisma/engines@4.13.0:
     resolution: {integrity: sha512-HrniowHRZXHuGT9XRgoXEaP2gJLXM5RMoItaY2PkjvuZ+iHc0Zjbm/302MB8YsPdWozAPHHn+jpFEcEn71OgPw==}
@@ -1809,7 +1811,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001481
-      electron-to-chromium: 1.4.370
+      electron-to-chromium: 1.4.371
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
 
@@ -2159,8 +2161,8 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /electron-to-chromium@1.4.370:
-    resolution: {integrity: sha512-c+wzD4sCYQeNeasbnArwsU3ig6+lR6bwQmxfMjB6bx+XoopVSPFp+7ZLxqa90MTC+Tq9QQ5l7zsMNG9GgMBorg==}
+  /electron-to-chromium@1.4.371:
+    resolution: {integrity: sha512-jlBzY4tFcJaiUjzhRTCWAqRvTO/fWzjA3Bls0mykzGZ7zvcMP7h05W6UcgzfT9Ca1SW2xyKDOFRyI0pQeRNZGw==}
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
