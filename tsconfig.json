@@ -26,7 +26,6 @@
     ],
     "paths": {
       "@/*": ["src/*", "./supabase-js.d.ts"],
-      "@prisma/client": ["./node_modules/@prisma/client"],
     }
   },
   "include": ["src/**/*", "twin.d.ts"],
