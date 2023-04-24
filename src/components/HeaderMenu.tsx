@@ -23,8 +23,8 @@ interface User {
   role?: string | null | undefined;
 }
 
-export default function HeaderMenu() {
-  const { data: session, status } = useSession();
+export default function HeaderMenu({ session }: { session: { user: User } }){
+  const { data: sessionData, status } = useSession();
   const loading = status === "loading";
 
   const handleLogIn = (e: { preventDefault: () => void; }) => {
