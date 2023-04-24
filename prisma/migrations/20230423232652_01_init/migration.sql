@@ -1,31 +1,33 @@
+-- CreateEnum
+CREATE TYPE "RoleType" AS ENUM ('ADMIN', 'USER', 'GUEST');
+
 -- CreateTable
-CREATE TABLE "Game" (
-    "id" TEXT NOT NULL,
+CREATE TABLE "games" (
+    "id" SERIAL NOT NULL,
     "image" TEXT,
     "title" TEXT NOT NULL,
     "description" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
-    "authorId" TEXT,
+    "authorId" INTEGER,
 
-    CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "games_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Post" (
-    "id" TEXT NOT NULL,
+CREATE TABLE "posts" (
+    "id" SERIAL NOT NULL,
     "image" TEXT,
     "title" TEXT NOT NULL,
-    "content" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
-    "authorId" TEXT,
+    "authorId" INTEGER,
 
-    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "posts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "accounts" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
@@ -44,20 +46,27 @@ CREATE TABLE "accounts" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "sessionToken" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "roles" (
+    "id" SERIAL NOT NULL,
+    "name" "RoleType" NOT NULL,
+
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
-    "bio" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT,
-    "email" TEXT,
+    "email" TEXT NOT NULL,
     "email_verified" TIMESTAMP(3),
     "avatar" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -67,10 +76,12 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "verificationtokens" (
-    "identifier" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL
+CREATE TABLE "user_roles" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
+
+    CONSTRAINT "user_roles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -83,19 +94,22 @@ CREATE UNIQUE INDEX "sessions_sessionToken_key" ON "sessions"("sessionToken");
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "verificationtokens_token_key" ON "verificationtokens"("token");
-
--- CreateIndex
-CREATE UNIQUE INDEX "verificationtokens_identifier_token_key" ON "verificationtokens"("identifier", "token");
+CREATE UNIQUE INDEX "user_roles_userId_roleId_key" ON "user_roles"("userId", "roleId");
 
 -- AddForeignKey
-ALTER TABLE "Game" ADD CONSTRAINT "Game_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "games" ADD CONSTRAINT "games_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "posts" ADD CONSTRAINT "posts_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
