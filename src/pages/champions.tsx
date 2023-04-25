@@ -1,40 +1,24 @@
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-  ChangeEvent,
-} from "react";
+import React from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as yup from 'yup';
+import axios from 'axios';
 
 import Head from "next/head";
 import Link from "next/link";
 import tw, { styled } from "twin.macro";
 import { css } from "@emotion/react";
 
-import axios from "axios";
-import Image from "next/image";
 import HeaderMenu from "@/components/HeaderMenu";
 
 const headStyle = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center`;
-const Header = tw.h1`text-3xl font-bold`;
-const Form = tw.form`flex flex-col`;
-const Label = tw.label`text-sm`;
-const Input = tw.input`border-2 border-gray-300 p-2 rounded-md`;
-const Button = tw.button`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
+const Header = tw.h1`text-3xl font-bold mt-16`;
+// const Form = tw.form`flex flex-col`;
+const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
+const TextInput = tw(Field)`px-4 py-2 border rounded w-full my-2`;
 
-type Props = {
-  onChange: (value: string) => void;
-  value: string;
-};
+const ErrorText = tw.span`text-red-500`;
 
-const TextInput = ({ value, onChange }: Props) => {
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  };
-
-  return <input type="text" value={value} onChange={handleInputChange} />;
-};
 
 interface Champ {
   id: string;
@@ -50,16 +34,26 @@ interface Champ {
 }
 
 export default function Champions() {
-  const [searchText, setSearchText] = useState("");
-  const [champ, setChamp] = useState<Champ | null>(null);
+  const initialValues = { searchText: '' };
+  
+  const validationSchema = yup.object().shape({
+    searchText: yup.string().required('Search text is required')
+  });
 
-  const handleSubmit = (event: { target: any; preventDefault: () => void }) => {
-    event.preventDefault();
-    getChampByName(searchText);
-  };
+  const handleSubmit = async (values: { searchText: string }, actions: any) => {
+    try {
+      const formattedName = formatName(values.searchText);
+      const champData = `http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/${formattedName}.json`;
 
-  const handleTextChange = (value: string) => {
-    setSearchText(value);
+      const res = await axios.get(champData);
+      setChamp(res.data.data[formattedName]);
+
+      actions.resetForm();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   const formatName = (name: string): string => {
@@ -76,17 +70,7 @@ export default function Champions() {
   const capitalize = (word: string): string =>
     `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`;
 
-  const getChampByName = async (name: string) => {
-    const formattedName = formatName(name);
-    const champData = `http://ddragon.leagueoflegends.com/cdn/13.7.1/data/en_US/champion/${formattedName}.json`;
-
-    try {
-      const res = await axios.get(champData);
-      setChamp(res.data.data[formattedName]);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const [champ, setChamp] = React.useState<Champ | null>(null);
 
   return (
     <>
@@ -99,10 +83,19 @@ export default function Champions() {
       <HeaderMenu />
       <Main>
         <Header>Search champion</Header>
-        <Form onSubmit={handleSubmit}>
-          <TextInput value={searchText} onChange={handleTextChange} />
-          <Button type="submit">Search</Button>
-        </Form>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+          {({ isSubmitting }) => (
+            <Form>
+              <Field type="text" id="searchText" name="searchText" as={TextInput}/>
+
+              <ErrorMessage name="searchText" component="div" style={{ color: 'red' }} />
+
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Searching...' : 'Search'}
+              </Button>
+            </Form>
+          )}
+        </Formik>
         {champ ?  (
           <ul>
             <li>Id: {champ.id}</li>
@@ -113,12 +106,4 @@ export default function Champions() {
       </Main>
     </>
   );
-}
-
-export async function getStaticProps() {
-  return {
-    props: {
-      apiKey: process.env.NEXT_PUBLIC_RIOT_API_KEY ?? "",
-    },
-  };
 }
