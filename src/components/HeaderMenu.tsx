@@ -61,23 +61,23 @@ export default function HeaderMenu({
       </ImageContainer>
       <Links>
         <Item>
-          <Link css={noUnderline} href="/">
+          <Link href="/">
             Home
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/players">
+          <Link href="/players">
             Players
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href="/champions">
+          <Link href="/champions">
             Champions
           </Link>
         </Item>
         {loggedIn ? (
           <Item>
-            <Link css={noUnderline} href="/profile">
+            <Link href="/profile">
               Profile
             </Link>
           </Item>
@@ -86,13 +86,13 @@ export default function HeaderMenu({
         {!loggedIn ? (
           <Item>
             {/* show link to profile if isUserLogged is true*/}
-            <Link css={noUnderline} href="/login">
+            <Link href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>
           </Item>
         ) : (
           <Item>
-            <Link css={noUnderline} href="/logout">
+            <Link href="/logout">
               <Button onClick={handleLogOut}>Logout</Button>
             </Link>
           </Item>

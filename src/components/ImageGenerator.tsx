@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import tw, { css, styled } from 'twin.macro';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -46,22 +47,14 @@ export default function ImageGenerator(): JSX.Element {
         <Form>
           <label htmlFor="description">Description:</label>
           <Field type="text" name="description" id="description" />
-
-          <ErrorMessage name="description" component="div" style={{ color: "red" }} />
-
+          <div tw="text-red-600">
+            <ErrorMessage name="description" component="div" />
+          </div>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Generating..." : "Generate Image"}
           </button>
 
           {imageUrl && <Image src={imageUrl} alt="Generated Image" />}
-
-          <style jsx>{`
-            label,
-            input {
-              display: block;
-              margin-bottom: 0.5rem;
-            }
-          `}</style>
         </Form>
       )}
     </Formik>

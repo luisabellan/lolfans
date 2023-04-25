@@ -1,24 +1,23 @@
-import React from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as yup from 'yup';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as yup from "yup";
+import axios from "axios";
 
 import Head from "next/head";
 import Link from "next/link";
 import tw, { styled } from "twin.macro";
-import { css } from "@emotion/react";
 
 import HeaderMenu from "@/components/HeaderMenu";
 
 const headStyle = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center`;
-const Header = tw.h1`text-3xl font-bold mt-16`;
-// const Form = tw.form`flex flex-col`;
+const CustomForm = tw.form`flex flex-col`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
 const TextInput = tw(Field)`px-4 py-2 border rounded w-full my-2`;
 
-const ErrorText = tw.span`text-red-500`;
-
+const ErrorText = styled.span`
+  color: red;
+`;
 
 interface Champ {
   id: string;
@@ -34,11 +33,13 @@ interface Champ {
 }
 
 export default function Champions() {
-  const initialValues = { searchText: '' };
-  
+  const initialValues = { searchText: "" };
+
   const validationSchema = yup.object().shape({
-    searchText: yup.string().required('Search text is required')
+    searchText: yup.string().required("Search text is required"),
   });
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleSubmit = async (values: { searchText: string }, actions: any) => {
     try {
@@ -80,20 +81,20 @@ export default function Champions() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu />
+      <HeaderMenu isUserLogged={loggedIn} />
       <Main>
         <Header>Search champion</Header>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
           {({ isSubmitting }) => (
-            <Form>
+            <CustomForm>
               <Field type="text" id="searchText" name="searchText" as={TextInput}/>
 
-              <ErrorMessage name="searchText" component="div" style={{ color: 'red' }} />
+              <ErrorMessage name="searchText" component={ErrorText} />
 
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Searching...' : 'Search'}
+                {isSubmitting ? "Searching..." : "Search"}
               </Button>
-            </Form>
+            </CustomForm>
           )}
         </Formik>
         {champ ?  (
