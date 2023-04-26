@@ -9,7 +9,7 @@ import tw, { styled } from "twin.macro";
 
 import HeaderMenu from "@/components/HeaderMenu";
 
-const headStyle = tw.h1`text-3xl font-bold`;
+const Header = tw.h1`text-3xl font-bold`;
 const Main = tw.main`flex flex-col justify-between items-center`;
 const CustomForm = tw.form`flex flex-col`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
