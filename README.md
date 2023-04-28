@@ -14,13 +14,13 @@ And much more to come! 💪
 Here are some of the main technologies used for developing this project:
 
 
-* TypeScript 🦕
-* Next.js 🔺
-* Tailwind CSS 🎨
-* Emotion 💅
-* Jotai 🪄
-* Prisma 💎
-* React Testing Library 🧪
+* TypeScript 🦕: A statically-typed superset of JavaScript that helps catch errors and improve code quality.
+* Next.js 🔺: A React framework that provides server-side rendering, file-based routing, and other helpful features for building web applications.
+* Tailwind CSS 🎨: A utility-first CSS framework that makes it easy to style components using pre-defined classes.
+* Emotion 💅: A library for writing CSS styles in JavaScript, providing many benefits like scoped styles, theming, and more.
+* Jotai 🪄: A state management library for React that uses atoms and selectors to manage application state in a more predictable and flexible way.
+* Prisma 💎: An ORM (Object-Relational Mapping) tool for  Node.js that simplifies database management and makes it easy to perform CRUD operations.
+* React Testing Library 🧪: A library for testing React components that focuses on making tests more user-focused and avoiding implementation details.
 
 ## Installation ⚙️
 To run this project locally, follow these steps:
