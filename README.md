@@ -48,3 +48,9 @@ This project is licensed under the Copyright © 2023.
 Hat tip to anyone whose code was used
 Inspiration ✨
 etc 🤗
+
+## Joke ☕
+
+Why do programmers prefer to call problems "opportunities"?
+
+Because it sounds much better to say "I'm seizing a learning opportunity" than to say "this unsolvable problem in my code is driving me crazy". 
