@@ -1,7 +1,7 @@
 {
   "author": "Luis Abellan <luis.abellan.dev@gmail.com>",
   "scripts": {
-    "dev": "next dev",
+    "dev": "pnpx prisma generate && next dev",
     "build": "pnpx prisma migrate dev && pnpx prisma generate && pnpm run seed && next build",
     "start": "next start",
     "lint": "next lint",
