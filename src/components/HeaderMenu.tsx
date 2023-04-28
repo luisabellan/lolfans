@@ -1,10 +1,14 @@
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import tw, { css, styled } from 'twin.macro';
+import { useState } from "react";
+import { atom, useAtom } from "jotai";
+import { isUserLoggedAtom } from "@/atoms/store";
+import useHistory from "next/router";
 import router from "next/router";
+
+
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -16,35 +20,31 @@ const noUnderline = {
   textDecoration: "none",
 };
 
-interface User {
-  name?: string | null | undefined;
-  email?: string | null | undefined;
-  image?: string | null | undefined;
-  role?: string | null | undefined;
-}
-
-export default function HeaderMenu({ session }: { session: { user: User } }){
+export default function HeaderMenu({
+  isUserLogged,
+}: {
+  isUserLogged: boolean;
+}) {
   const { data: sessionData, status } = useSession();
   const loading = status === "loading";
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom)
 
-  const handleLogIn = (e: { preventDefault: () => void; }) => {
+  const handleLogIn = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    signIn().then(() => {
-      // onSuccess callback
-      if (session) {
-        router.push("/"); // redirect after successful login
-      }
-    });
+    setLoggedIn(!loggedIn);
+    if (!loggedIn) {
+      // signIn("google");
+      router.push("/");
+    }
   };
 
-  const handleLogOut = (e: { preventDefault: () => void; }) => {
+  const handleLogOut = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    signOut().then(() => {
-      // onSuccess callback
-      if (!session) {
-        router.push("/"); // redirect after successful logout
-      }
-    });
+    setLoggedIn(!loggedIn);
+
+    if (!loggedIn) {
+      router.push("/");
+    }
   };
 
   return (
@@ -75,7 +75,7 @@ export default function HeaderMenu({ session }: { session: { user: User } }){
             Champions
           </Link>
         </Item>
-        {session?.user ? (
+        {loggedIn ? (
           <Item>
             <Link href="/profile">
               Profile
@@ -83,21 +83,9 @@ export default function HeaderMenu({ session }: { session: { user: User } }){
           </Item>
         ) : null}
 
+        {!loggedIn ? (
           <Item>
-            <Link href="/api-example">
-              API
-            </Link>
-          </Item>
-          {session && session.user && session.user?.role && session.user.role === "admin" ? (
-          <Item>
-            <Link href="/me">
-              Admin
-            </Link>
-          </Item>
-        ) : null}
-
-        {!session?.user ? (
-          <Item>
+            {/* show link to profile if isUserLogged is true*/}
             <Link href="/login">
               <Button onClick={handleLogIn}>Login</Button>
             </Link>

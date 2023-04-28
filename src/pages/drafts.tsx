@@ -1,76 +1,67 @@
 import React from "react";
 import { GetServerSideProps } from "next";
-import Layout from "../components/Layout";
-import Post, { PostProps } from "../components/Post";
+import Layout from "@/components/Layout";
+import Post, { PostProps } from "@/components/Post";
 import { useSession, getSession } from "next-auth/react";
-import prisma from '../lib/prisma'
-
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getSession({ req });
-  if (!session) {
-    res.statusCode = 403;
-    return { props: { drafts: [] } };
-  }
-
-  const drafts = await prisma.post.findMany({
-    where: {
-      author: { email: session?.user?.email },
-      published: false,
-    },
-    include: {
-      author: {
-        select: { name: true },
-      },
-    },
-  });
-  return {
-    props: { drafts },
-  };
-};
+import prisma from '@/lib/prisma'
 
 type Props = {
   drafts: PostProps[];
+  session: any; // replace 'any' with the actual type of the session object
 };
 
-const Drafts: React.FC<Props> = (props) => {
-  const {data: session}= useSession();
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }) => {
+  const session = await getSession({ req });
 
-  if (!session) {
-    return (
-      <Layout>
-        <h1>My Drafts</h1>
-        <div>You need to be authenticated to view this page.</div>
-      </Layout>
-    );
+  try {
+    const drafts = await prisma.post.findMany({
+      where: {
+        author: { email: session.user.email },
+        published: false,
+      },
+      include: { author: true },
+    });
+    
+    const formattedDrafts = drafts.map((draft) => {
+      return {
+        id: draft.id,
+        title: draft.title,
+        content: draft.content,
+        author: {
+          name: draft.author.name,
+          email: draft.author.email,
+        },
+      };
+    });
+    
+    return { props: { drafts: formattedDrafts, session } };
+  } catch (error) {
+    console.error(error);
+    res.statusCode = 500;
+    return { props: { drafts: [], session: null } };
   }
+};
+
+const Drafts: React.FC<Props> = ({ drafts, session }) => {
+  const { data } = useSession();
 
   return (
     <Layout>
       <div className="page">
         <h1>My Drafts</h1>
-        <main>
-          {props.drafts.map((post) => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
+        {(!data && !session) ? (
+          <div>You need to be authenticated to view this page.</div>
+        ) : (
+          <main>
+            <React.Fragment>
+              {drafts.map((post) => (
+                <Post key={post.id} post={post} />
+              ))}
+            </React.Fragment>
+          </main>
+        )}
       </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
+      <style jsx>{/* .. */}</style>
     </Layout>
   );
 };
