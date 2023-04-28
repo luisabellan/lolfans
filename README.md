@@ -12,11 +12,14 @@ And much more to come! 💪
 ## Technologies 🛠️
 Here are some of the main technologies used for developing this project:
 
-Node.js 🚀
-Express 🚊
-React ⚛️
-PostgreSQL 🐘
-Bootstrap 🌈
+
+TypeScript 🦕
+Next.js 🔺
+Tailwind CSS 🎨
+Emotion 💅
+Jotai 🪄
+Prisma 💎
+React Testing Library 🧪
 
 ## Installation ⚙️
 
