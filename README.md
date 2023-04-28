@@ -1,34 +1,40 @@
-# Twin + Next.js + Emotion + TypeScript
+# Lol Fans 👊
+Welcome to the Lol Fans web application repository! This is where you'll be able to view, search and filter all the data regarding the top players and teams in the competitive scene of League of Legends. 🎮
 
-<p><a href="https://github.com/ben-rogerson/twin.macro#gh-light-mode-only" target="_blank"><img src="../.github/twin-light.svg" alt="Twin" width="60" height="70"></a><a href="https://github.com/ben-rogerson/twin.macro#gh-dark-mode-only" target="_blank"><img src="../.github/twin-dark.svg" alt="Twin" width="60" height="70"></a><a href="https://nextjs.org#gh-light-mode-only" target="_blank"><img src="../.github/next-light.svg" alt="Next.js" width="80" height="70"></a><a href="https://nextjs.org#gh-dark-mode-only" target="_blank"><img src="../.github/next-dark.svg" alt="Next.js" width="80" height="70"></a><a href="https://emotion.sh/docs/introduction" target="_blank"><img src="../.github/emotion.svg" alt="Emotion" width="60" height="70"></a><a href="https://www.typescriptlang.org/" target="_blank"><img src="../.github/typescript.svg" alt="TypeScript" width="60" height="70"></a>
-</p>
+## Demo 🚀
+You can access our demo here and start enjoying it right now! 😎
 
-**Download this example using [degit](https://github.com/Rich-Harris/degit)**
+## Features 🤖
+Browse through a huge database of LoL players and teams. 👥
+Search 🔍 and filter functionalities to easily locate specific information.
+Up-to-date news 📰 and videos 📹 about the competitive scene.
+And much more to come! 💪
+## Technologies 🛠️
+Here are some of the main technologies used for developing this project:
 
-```shell
-npx degit https://github.com/ben-rogerson/twin.examples/next-emotion-typescript folder-name
-```
+Node.js 🚀
+Express 🚊
+React ⚛️
+PostgreSQL 🐘
+Bootstrap 🌈
 
-From within the new folder, run `npm install`, then `npm run dev` to start the dev server.
+## Installation ⚙️
 
-## Customization
+To run this project locally, follow these steps:
 
-- [View the config options →](https://github.com/ben-rogerson/twin.macro/blob/master/docs/options.md)
-- [Customizing the tailwind config →](https://github.com/ben-rogerson/twin.macro/blob/master/docs/customizing-config.md)
+1. Clone this repository: git clone https://github.com/luisabellan/lolfans.git. 📥
+2. Install the required dependencies using yarn: yarn install OR install the required dependencies using npm: npm install OR install the required dependencies using pnpm: pnpm install
+3. Start the development server: yarn start OR start the development server with npm: npm start OR start the development server with pnpm: pnpm start
 
-[](#next-steps)
+## Feedback 📣
+We appreciate any feedback or suggestions you may have regarding this project. Feel free to submit an issue on this GitHub repository or contact us directly at [our email] (mailto:luis.abellan.dev@gmail.com). 📧
 
-## Next steps
+## Authors 👨‍💻
+Luis Abellan - Initial work - luisabellan 😎
+License 📜
+This project is licensed under the Copyright © 2023.
 
-Learn how to work with twin
-
-- [The prop styling guide](https://github.com/ben-rogerson/twin.macro/blob/master/docs/prop-styling-guide.md) - A must-read guide to level up on prop styling
-- [The styled component guide](https://github.com/ben-rogerson/twin.macro/blob/master/docs/styled-component-guide.md) - A must-read guide on getting productive with styled-components
-
-Learn more about emotion
-
-- [Emotion’s css prop](https://emotion.sh/docs/css-prop)
-- [Emotion’s css import](https://emotion.sh/docs/css-prop#string-styles)
-- [Emotion’s styled import](https://emotion.sh/docs/styled)
-
-Added jest and react-testing-library
+## Acknowledgments 🙏
+Hat tip to anyone whose code was used
+Inspiration ✨
+etc 🤗
