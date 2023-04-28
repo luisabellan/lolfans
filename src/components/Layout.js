@@ -31,7 +31,8 @@ export default function Layout({ children }) {
     
            {result.data ? (<h2>{result.data.greeting}</h2>) : (<h2>Loading...</h2>)}
         */}
-      <main>{children}</main>
+      {/* <main>{children}</main> */}
+      <Welcome>{children}</Welcome>
     </>
   );
 }
