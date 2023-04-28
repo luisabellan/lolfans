@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Fragment, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -46,7 +45,7 @@ const menuItems = [
 
 
 
-const Layout = async ({userName, isUserLogged, children = null }) => {
+/* const Layout = async ({userName, isUserLogged, children = null }) => {
   const { data: session, status } = useSession();
   const user = session?.user || (userName && isUserLogged);
   const isLoadingUser = status === 'loading';
@@ -64,19 +63,8 @@ const Layout = async ({userName, isUserLogged, children = null }) => {
 
    // Call the getPlaylistItems function to fetch the list of videos
    const videos = await getPlaylistItems(channelId);
-=======
-import React from "react";
-import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
-import PropTypes from "prop-types";
-import AuthModal from "./AuthModal";
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { useSession, signOut } from "next-auth/react";
-import HeaderMenu from "./HeaderMenu";
-import Welcome from "./Welcome";
->>>>>>> dev
+
+} */
 
 export default function Layout({ isUserLogged, children }) {
   return (
