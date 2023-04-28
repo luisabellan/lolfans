@@ -1,36 +1,83 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { ParsedUrlQuery } from 'querystring';
-import { getSession } from 'next-auth/client';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
-// Import types
-import { Session } from 'next-auth';
-import { GameProps, FormattedDraft } from '@/types';
+async function main() {
+  console.log('Starting database seeding...');
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext<ParsedUrlQuery>) => {
-
-  // Fetch drafts and format them as GameProps[]
-  const rawDrafts = await fetch(`/api/drafts?secret=${process.env.UPLOADER_SECRET}`);
-  const drafts: FormattedDraft[] = await rawDrafts.json();
-
-  const games: GameProps[] = drafts.map((draft) => {
-    let game: GameProps = {
-      id: draft.id,
-      title: draft.title,
-      description: draft.description,
-      image: draft.image,
-      published: !!draft.published,
-      // add your other properties here
-    };
-    return game;
+  // Create some example games
+  const game1 = await prisma.game.create({
+    data: {
+      title: 'Game 1',
+      description: 'This is the first game',
+      published: true,
+    },
   });
 
-  // Fetch session
-  const session = await getSession({ req });
-
-  return {
-    props: {
-      games,
-      session,
+  const game2 = await prisma.game.create({
+    data: {
+      title: 'Game 2',
+      description: 'This is the second game',
+      published: false,
     },
-  };
-};
+  });
+
+  // Create some example roles
+  const adminRole = await prisma.role.create({
+    data: {
+      name: 'ADMIN',
+    },
+  });
+
+  const userRole = await prisma.role.create({
+    data: {
+      name: 'USER',
+    },
+  });
+
+  // Create some example users
+  const user1 = await prisma.user.create({
+    data: {
+      name: 'Alice',
+      email: 'alice@example.com',
+      roles: {
+        connect: [{ id: userRole.id }],
+      },
+      accounts: {
+        create: [
+          {
+            type: 'email',
+            provider: 'email',
+            providerAccountId: 'alice@example.com',
+          },
+        ],
+      },
+    },
+  });
+
+  const user2 = await prisma.user.create({
+    data: {
+      name: 'Bob',
+      email: 'bob@example.com',
+      roles: {
+        connect: [{ id: adminRole.id }, { id: userRole.id }],
+      },
+      accounts: {
+        create: [
+          {
+            type: 'google',
+            provider: 'google',
+            providerAccountId: '1234567890',
+          },
+        ],
+      },
+    },
+  });
+
+  console.log('Seeding successful!');
+}
+
+main()
+  .catch((e) => console.error(e))
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
