@@ -14,13 +14,13 @@ And much more to come! 💪
 Here are some of the main technologies used for developing this project:
 
 
-TypeScript 🦕
-Next.js 🔺
-Tailwind CSS 🎨
-Emotion 💅
-Jotai 🪄
-Prisma 💎
-React Testing Library 🧪
+* TypeScript 🦕
+* Next.js 🔺
+* Tailwind CSS 🎨
+* Emotion 💅
+* Jotai 🪄
+* Prisma 💎
+* React Testing Library 🧪
 
 ## Installation ⚙️
 To run this project locally, follow these steps:
