@@ -14,7 +14,7 @@ import { useAtom } from "jotai";
 import {isUserLoggedAtom} from "@/atoms/store";
 
 const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -70,7 +70,7 @@ export default function ImageGeneration() {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );
@@ -107,7 +107,7 @@ export default function ImageGeneration() {
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "",
+      apiKey: process.env.OPENAI_API_KEY ?? "",
     },
   };
 }

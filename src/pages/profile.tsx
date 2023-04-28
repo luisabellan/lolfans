@@ -13,7 +13,7 @@ import Layout from "@/components/Layout";
 
 
 const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -110,7 +110,7 @@ const ProfilePage: React.FC<ProfileProps> = () => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );
@@ -157,7 +157,7 @@ export default ProfilePage;
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "",
+      apiKey: process.env.OPENAI_API_KEY ?? "",
     },
   };
 }

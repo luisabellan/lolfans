@@ -104,7 +104,7 @@ export default Players;
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.NEXT_PUBLIC_RIOT_API_KEY ?? "",
+      apiKey: process.env.RIOT_API_KEY ?? "",
     },
   };
 }

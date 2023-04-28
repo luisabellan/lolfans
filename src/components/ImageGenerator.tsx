@@ -29,7 +29,7 @@ export default function ImageGenerator(): JSX.Element {
         },
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           },
         }
       );

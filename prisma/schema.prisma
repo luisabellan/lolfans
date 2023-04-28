@@ -19,20 +19,9 @@ model Game {
   @@map("games")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  image     String?
-  title     String
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
-
-  @@map("posts")
-}
-
 model Account {
   id                 Int     @id @default(autoincrement())
-  userId             Int
+  userId             Int     @unique
   type               String
   provider           String
   providerAccountId  String
@@ -69,9 +58,13 @@ enum RoleType {
 }
 
 model Role {
-  id       Int        @id @default(autoincrement())
-  name     RoleType
-  UserRole UserRole[]
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  users     User[]     @relation("UserRoles") // many-to-many relationship
+  userRoles UserRole[]
+  User      User[]
 
   @@map("roles")
 }
@@ -84,11 +77,13 @@ model User {
   avatar        String?
   createdAt     DateTime   @default(now()) @map(name: "created_at")
   updatedAt     DateTime   @updatedAt @map(name: "updated_at")
-  post          Post[]
-  role          UserRole[]
-  game          Game[]
-  account       Account[]
-  session       Session[]
+  roles         Role[]     @relation("UserRoles")
+  games         Game[]
+  accounts      Account[]
+  sessions      Session[]
+  role          Role?      @relation(fields: [roleId], references: [id])
+  roleId        Int?
+  UserRole      UserRole[]
 
   @@map("users")
 }

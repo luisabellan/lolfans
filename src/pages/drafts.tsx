@@ -80,7 +80,6 @@ const Drafts: React.FC<Props> = ({ drafts, session }) => {
           </main>
         )}
       </div>
-      <style jsx>{/* .. */}</style>
     </Layout>
   );
 };

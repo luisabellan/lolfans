@@ -1,9 +1,11 @@
-
 {
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["dom", "es2017"],
+    "lib": [
+      "dom",
+      "es2017"
+    ],
     "rootDir": "src",
     "outDir": "dist",
     "esModuleInterop": true,
@@ -25,11 +27,24 @@
       }
     ],
     "paths": {
-      "@/*": ["src/*", "./supabase-js.d.ts"],
-      "@prisma/client": ["./node_modules/@prisma/client"],
+      "@/*": [
+        "src/*",
+        "./supabase-js.d.ts"
+      ],
+      "@prisma/client": [
+        "./node_modules/@prisma/client"
+      ],
     }
   },
-  "include": ["src/**/*", "twin.d.ts"],
-  "exclude": ["node_modules"],
-  "types": ["types", "react/next"]
+  "include": [
+    "src/**/*",
+    "twin.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "types": [
+    "types",
+    "react/next"
+  ]
 }

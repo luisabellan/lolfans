@@ -1,74 +1,36 @@
-import { PrismaClient } from '@prisma/client';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import { getSession } from 'next-auth/client';
 
-const prisma = new PrismaClient();
+// Import types
+import { Session } from 'next-auth';
+import { GameProps, FormattedDraft } from '@/types';
 
-async function main() {
-  console.log('Start seeding...');
+export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext<ParsedUrlQuery>) => {
 
-  // Create roles
-  const adminRole = await prisma.role.create({
-    data: {
-      name: 'ADMIN',
+  // Fetch drafts and format them as GameProps[]
+  const rawDrafts = await fetch(`/api/drafts?secret=${process.env.UPLOADER_SECRET}`);
+  const drafts: FormattedDraft[] = await rawDrafts.json();
+
+  const games: GameProps[] = drafts.map((draft) => {
+    let game: GameProps = {
+      id: draft.id,
+      title: draft.title,
+      description: draft.description,
+      image: draft.image,
+      published: !!draft.published,
+      // add your other properties here
+    };
+    return game;
+  });
+
+  // Fetch session
+  const session = await getSession({ req });
+
+  return {
+    props: {
+      games,
+      session,
     },
-  });
-  const userRole = await prisma.role.create({
-    data: {
-      name: 'USER',
-    },
-  });
-
-  // Create users
-  const alice = await prisma.user.create({
-    data: {
-      name: 'Alice',
-      email: 'alice@example.com',
-      avatar: 'https://i.pravatar.cc/150?u=alice',
-      role: {
-        connect: { id: userRole.id },
-      },
-    },
-  });
-  const bob = await prisma.user.create({
-    data: {
-      name: 'Bob',
-      email: 'bob@example.com',
-      avatar: 'https://i.pravatar.cc/150?u=bob',
-      role: {
-        connect: { id: adminRole.id },
-      },
-    },
-  });
-
-  // Create games
-  const game1 = await prisma.game.create({
-    data: {
-      title: 'Game 1',
-      description: 'This is a cool game.',
-      published: true,
-      author: {
-        connect: { id: alice.id },
-      },
-    },
-  });
-  const game2 = await prisma.game.create({
-    data: {
-      title: 'Game 2',
-      description: 'This is another cool game.',
-      published: false,
-      author: {
-        connect: { id: bob.id },
-      },
-    },
-  });
-
-  console.log('Seeding finished.');
-}
-
-main()
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  };
+};
