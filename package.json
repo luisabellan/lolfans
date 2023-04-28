@@ -5,7 +5,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "pnpm run build && npx ts-node --transpile-only ./prisma/seed.ts"
+    "seed": "pnpm run build && npx ts-node --transpile-only ./prisma/seed.ts",
+    "reset": "rm -rf node_modules .next && rm pnpm-lock.yaml ; pnpm i && prisma generate && pnpm build"
   },
   "dependencies": {
     "@emotion/css": "^11.10.8",
