@@ -2,7 +2,7 @@
   "author": "Luis Abellan <luis.abellan.dev@gmail.com>",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && pnpm run seed && next build",
+    "build": "pnpx prisma generate && pnpm run seed && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "pnpm run build && npx ts-node --transpile-only ./prisma/seed.ts",

@@ -28,12 +28,34 @@ To run this project locally, follow these steps:
 * Clone this repository: git clone https://github.com/luisabellan/lolfans.git. 📥
 
 **Note: Make sure you have pnpm installed globally on your system before running the below commands**
-Install pnpm: `npm install -g pnpm`
+* Install pnpm: 
 
-Dependencies using pnpm: `pnpm install`
-Run the database: `pnpm run seed`
-Run the server: `pnpm run start`
-Start the development server: `pnpm run dev`
+```bash 
+npm install -g pnpm
+```
+
+Installation commands:
+
+* Dependencies using pnpm: 
+
+```bash
+pnpm install 
+```
+* Run the database: 
+
+```bash 
+pnpm run seed
+```
+* Run the server: 
+
+```bash 
+pnpm run start
+```
+* Start the development server: 
+
+```bash 
+pnpm run dev
+```
 
 ## Feedback 📣
 
