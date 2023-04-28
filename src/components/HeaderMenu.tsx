@@ -1,11 +1,14 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import tw, { styled } from 'twin.macro';
-import { useState } from 'react';
-import { atom, useAtom } from 'jotai';
-import { isUserLoggedAtom } from '@/atoms/store';
-import useHistory from 'next/router';
-import router from 'next/router';
+import Link from "next/link";
+import Image from "next/image";
+import { useSession, signIn, signOut } from "next-auth/react";
+import tw, { css, styled } from 'twin.macro';
+import { useState } from "react";
+import { atom, useAtom } from "jotai";
+import { isUserLoggedAtom } from "@/atoms/store";
+import useHistory from "next/router";
+import router from "next/router";
+
+
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -17,15 +20,25 @@ const noUnderline = {
   textDecoration: 'none',
 };
 
-const loggedInAtom = atom(false);
 export default function HeaderMenu({
   isUserLogged,
 }: {
   isUserLogged: boolean;
 }) {
-  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
+  const { data: sessionData, status } = useSession();
+  const loading = status === "loading";
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom)
 
-  const handleLoginClick = (e: { preventDefault: () => void }) => {
+  const handleLogIn = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setLoggedIn(!loggedIn);
+    if (!loggedIn) {
+      // signIn("google");
+      router.push("/");
+    }
+  };
+
+  const handleLogOut = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoggedIn(!loggedIn);
 
