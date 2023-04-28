@@ -2,7 +2,7 @@ import React from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 
-export type PostProps = {
+export type GameProps = {
   id: number;
   title: string;
   author: {
@@ -13,14 +13,14 @@ export type PostProps = {
   published: boolean;
 };
 
-const Post: React.FC<{ post: PostProps }> = ({ post }) => {
-  const authorName = post.author ? post.author.name : "Unknown author";
+const Game: React.FC<{ game: GameProps }> = ({ game }) => {
+  const authorName = game.author ? game.author.name : "Unknown author";
   return (
-    <div onClick={() => Router.push("/post/[id]", `/post/${post.id}`)}>
-      <h2>{post.title}</h2>
+    <div onClick={() => Router.push("/game/[id]", `/game/${game.id}`)}>
+      <h2>{game.title}</h2>
       <small>By {authorName}</small>
       {/* react/no-children-prop */}
-      <ReactMarkdown children={post.content} />
+      <ReactMarkdown children={game.content} />
       <style jsx>{`
         div {
           color: inherit;
@@ -31,4 +31,4 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   );
 };
 
-export default Post;
+export default Game;

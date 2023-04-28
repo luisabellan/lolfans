@@ -25,19 +25,13 @@ const Welcome: React.FC<HeaderProps> = ({
   return (
     <Container>
       <h1 tw="mt-16">Welcome to My Game App</h1>
-      {/* {isUserLogged ? (
+      {isUserLogged ? (
         <p tw="mt-2">Hello, {userName}!</p>
       ) : (
         <p tw="mt-2">Please login to see your profile</p>
-      )} */}
+      )} 
 
-      <main className="flex-grow container mx-auto">
-        <div className="px-4 py-12">
-          {typeof children === 'function' ? children(openModal) : children}
-        </div>
-      </main>
-
-      <AuthModal show={showModal} onClose={closeModal} />
+     
     </Container>
   );
 };

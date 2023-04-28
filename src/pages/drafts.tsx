@@ -1,12 +1,12 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import Layout from "@/components/Layout";
-import Post, { PostProps } from "@/components/Post";
+import Game, { GameProps } from "@/components/Game";
 import { useSession, getSession } from "next-auth/react";
 import prisma from '@/lib/prisma'
 
 type Props = {
-  drafts: PostProps[];
+  drafts: GameProps[];
   session: any; // replace 'any' with the actual type of the session object
 };
 
@@ -14,15 +14,34 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
   const session = await getSession({ req });
 
   try {
-    const drafts = await prisma.post.findMany({
+    const drafts = await prisma.game.findMany({
       where: {
-        author: { email: session.user.email },
+        author: { email: session?.user?.email },
         published: false,
       },
       include: { author: true },
     });
-    
-    const formattedDrafts = drafts.map((draft) => {
+
+    interface Draft {
+      id: any; 
+      title: any;
+      content: any; 
+      author: { 
+        name: any; 
+        email: any; };
+    }
+
+    interface FormattedDraft { 
+        id: any; 
+        title: any; 
+        content: any; 
+        author: { 
+          name: any; 
+          email: any; 
+        }; 
+    }
+
+    const formattedDrafts = drafts.map((draft: Draft): FormattedDraft => {
       return {
         id: draft.id,
         title: draft.title,
@@ -33,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, res }
         },
       };
     });
-    
+
     return { props: { drafts: formattedDrafts, session } };
   } catch (error) {
     console.error(error);
@@ -54,8 +73,8 @@ const Drafts: React.FC<Props> = ({ drafts, session }) => {
         ) : (
           <main>
             <React.Fragment>
-              {drafts.map((post) => (
-                <Post key={post.id} post={post} />
+              {drafts.map((game) => (
+                <Game key={game.id} game={game} />
               ))}
             </React.Fragment>
           </main>
