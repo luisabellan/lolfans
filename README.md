@@ -25,13 +25,15 @@ Here are some of the main technologies used for developing this project:
 ## Installation ⚙️
 To run this project locally, follow these steps:
 
-Clone this repository: git clone https://github.com/luisabellan/lolfans.git. 📥
-Install the required dependencies using pnpm: pnpm install
-Install the Prisma client dependencies: pnpm install --save-dev @prisma/client
-Run the database: pnpm run seed
-Run the server: pnpm run dev
-Start the development server: pnpm start
-Note: Make sure you have pnpm installed globally on your system before running the above commands.
+* Clone this repository: git clone https://github.com/luisabellan/lolfans.git. 📥
+
+**Note: Make sure you have pnpm installed globally on your system before running the below commands**
+Install pnpm: `npm install -g pnpm`
+
+Dependencies using pnpm: `pnpm install`
+Run the database: `pnpm run seed`
+Run the server: `pnpm run start`
+Start the development server: `pnpm run dev`
 
 ## Feedback 📣
 
