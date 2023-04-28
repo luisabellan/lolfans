@@ -90,4 +90,4 @@ export default function Layout({ isUserLogged, children }) {
       {children}
     </>
   );
-}
+}}
