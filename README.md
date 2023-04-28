@@ -14,13 +14,13 @@ And much more to come! 💪
 Here are some of the main technologies used for developing this project:
 
 
-TypeScript 🦕
-Next.js 🔺
-Tailwind CSS 🎨
-Emotion 💅
-Jotai 🪄
-Prisma 💎
-React Testing Library 🧪
+* TypeScript 🦕: A statically-typed superset of JavaScript that helps catch errors and improve code quality. https://github.com/microsoft/TypeScript
+* Next.js 🔺: A React framework that provides server-side rendering, file-based routing, and other helpful features for building web applications. https://github.com/vercel/next.js/
+* Tailwind CSS 🎨: A utility-first CSS framework that makes it easy to style components using pre-defined classes. https://github.com/tailwindlabs/tailwindcss
+* Emotion 💅: A library for writing CSS styles in JavaScript, providing many benefits like scoped styles, theming, and more. https://github.com/emotion-js/emotion
+* Jotai 🪄: A state management library for React that uses atoms and selectors to manage application state in a more predictable and flexible way. https://github.com/pmndrs/jotai
+* Prisma 💎: An ORM (Object-Relational Mapping) tool for  Node.js that simplifies database management and makes it easy to perform CRUD operations. https://github.com/prisma/prisma
+* React Testing Library 🧪: A library for testing React components that focuses on making tests more user-focused and avoiding implementation details. https://github.com/testing-library/react-testing-library
 
 ## Installation ⚙️
 To run this project locally, follow these steps:
@@ -48,3 +48,9 @@ This project is licensed under the Copyright © 2023.
 Hat tip to anyone whose code was used
 Inspiration ✨
 etc 🤗
+
+## Joke ☕
+
+Why do programmers prefer to call problems "opportunities"?
+
+Because it sounds much better to say "I'm seizing a learning opportunity" than to say "this unsolvable problem in my code is driving me crazy". 
