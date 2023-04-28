@@ -6,7 +6,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "npx ts-node --transpile-only ./prisma/seed.ts",
-    "reset": "rm -rf node_modules .next && rm pnpm-lock.yaml ; pnpm i"
+    "reset": "rm -rf node_modules ; rm -rf .next ; rm -rf prisma/migrations  ; rm pnpm-lock.yaml"
   },
   "dependencies": {
     "@emotion/css": "^11.10.8",
