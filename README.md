@@ -35,7 +35,7 @@ Note: Make sure you have pnpm installed globally on your system before running t
 
 ## Feedback 📣
 
-We appreciate any feedback or suggestions you may have regarding this project. Feel free to submit an issue on this GitHub repository or contact us directly at [our email] (mailto:luis.abellan.dev@gmail.com). 📧
+We appreciate any feedback or suggestions you may have regarding this project. Feel free to submit an issue on this GitHub repository or contact us directly at [luis.abellan.dev@gmail.com](mailto:luis.abellan.dev@gmail.com). 📧
 
 ## Authors 👨‍💻
 
