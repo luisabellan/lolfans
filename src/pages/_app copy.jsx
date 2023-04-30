@@ -1,14 +1,14 @@
 import { AppProps } from "next/app";
-import type { AppType } from "next/app";
 import { trpc } from "@/lib/trpc";
 import GlobalStyles from "@/styles/GlobalStyles";
 import { Provider as StateProvider } from "jotai";
-import { Provider as AuthProvider } from "next-auth/client";
+import { SessionProvider as AuthProvider } from "next-auth/react";
+import { withTRPC } from "@trpc/next";
 
-function App({ Component, pageProps }: AppProps) {
-  // Changed function signature
+
+function MyApp({ Component, pageProps, session }) {
   return (
-    <AuthProvider session={pageProps.session}>
+    <AuthProvider session={session}>
       <StateProvider>
         <GlobalStyles />
         <Component {...pageProps} />
@@ -17,4 +17,5 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default trpc.withTRPC(App);
+export default withTRPC(MyApp);
+

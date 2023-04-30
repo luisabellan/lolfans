@@ -78,30 +78,36 @@ export default function ImageGeneration() {
   };
 
 
-  return (
-    <>
-      <Head>
-        <title>Generate image</title>
-        <meta name="description" content="Generate image" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <HeaderMenu isUserLogged={false} />
-      <div>
-        <h1>Generate image</h1>
+  return <>
+    <Head>
+      <title>Generate image</title>
+      <meta name="description" content="Generate image" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
+    <HeaderMenu isUserLogged={false} />
+    <div>
+      <h1>Generate image</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            Description:
-          <input type="text" value={description} onChange={handleChange} />
+      <form onSubmit={handleSubmit}>
+        <label>
+          Description:
+        <input type="text" value={description} onChange={handleChange} />
 
-          </label>
-          <button type="submit">Generate Image</button>
-        </form>
-        {imageUrl && <Image width="400" height="400" src={imageUrl} alt="Generated Image" />}
-      </div>
-    </>
-  );
+        </label>
+        <button type="submit">Generate Image</button>
+      </form>
+      {imageUrl && <Image
+        width="400"
+        height="400"
+        src={imageUrl}
+        alt="Generated Image"
+        style={{
+          maxWidth: "100%",
+          height: "auto"
+        }} />}
+    </div>
+  </>;
 }
 
 export async function getStaticProps() {

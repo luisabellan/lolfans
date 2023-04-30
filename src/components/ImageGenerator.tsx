@@ -54,7 +54,13 @@ export default function ImageGenerator(): JSX.Element {
             {isSubmitting ? "Generating..." : "Generate Image"}
           </button>
 
-          {imageUrl && <Image src={imageUrl} alt="Generated Image" />}
+          {imageUrl && <Image
+            src={imageUrl}
+            alt="Generated Image"
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />}
         </Form>
       )}
     </Formik>

@@ -59,5 +59,5 @@ module.exports = function withTwin(nextConfig) {
         return config
       }
     },
-  }
+  };
 }

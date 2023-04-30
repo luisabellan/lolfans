@@ -1,6 +1,6 @@
-import { google, youtube_v3 } from "googleapis";
+// import { google, youtube_v3 } from "googleapis";
 
-const youtube: youtube_v3.Youtube = google.youtube({
+/* const youtube: youtube_v3.Youtube = google.youtube({
   version: "v3",
   auth: process.env.YOUTUBE_API_KEY
 });
@@ -14,4 +14,4 @@ export async function fetchPlayList(channelId: string): Promise<youtube_v3.Schem
   });
 
   return res.data.items!;
-}
+} */

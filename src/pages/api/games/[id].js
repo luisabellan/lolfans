@@ -1,82 +1,57 @@
-// pages/games/[id].js
+import { getSession } from 'next-auth/react';
+import { prisma } from '@/lib/prisma';
+import { supabase } from '@/lib/supabase';
 
-import { useRouter } from "next/router";
-
-import Image from "next/image";
-import Layout from "@/components/Layout";
-import { PrismaClient } from "@prisma/client";
-
-// Instantiate Prisma Client
-const prisma = new PrismaClient();
-
-const ListedHome = (game = null) => {
-  // Retrieve the Next.js router
-  const router = useRouter();
-  // Fallback version
-  if (router.isFallback) {
-    return "Loading...";
-  }
-// Return full page
-  return (
-    <Layout>
-      <div className="max-w-screen-lg mx-auto">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4 space-y-4">
-          <div>
-            <h1 className="text-2xl font-semibold truncate">
-              {game?.title ?? ""}
-            </h1>
-          </div>
-        </div>
-
-        <div className="mt-6 relative aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg shadow-md overflow-hidden">
-          {game?.image ? (
-            <Image
-              src={game.image}
-              alt={game.title}
-              layout="fill"
-              objectFit="cover"
-            />
-          ) : null}
-        </div>
-
-        <p className="mt-8 text-lg">{game?.description ?? ""}</p>
-      </div>
-    </Layout>
-  );
-};
-
-export async function getStaticPaths() {
-  // Get all the games IDs from the database
-  const games = await prisma.game.findMany({
-    select: { id: true },
-  });
-
-  return {
-    paths: games.map((game) => ({
-      params: { id: game.id },
-    })),
-    fallback: false,
-  };
-}
-
-export async function getStaticProps({ params }) {
-  // Get the current game from the database
-  const game = await prisma.game.findUnique({
-    where: { id: params.id },
-  });
-
-  if (game) {
-    return {
-      props: JSON.parse(JSON.stringify(game)),
-    };
+export default async function handler(req, res) {
+  // Check if user is authenticated
+  const session = await getSession({ req });
+  if (!session) {
+    return res.status(401).json({ message: 'Unauthorized.' });
   }
 
-  return {
-    redirect: {
-      destination: "/",
-      permanent: false,
-    },
-  };
-}
+  // Retrieve the authenticated user
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { listedGames: true },
+  });
 
-export default ListedHome;
+  // Check if authenticated user is the owner of this game
+  const { id } = req.query;
+  if (!user?.listedGames?.find(game => game.id === id)) {
+    return res.status(401).json({ message: 'Unauthorized.' });
+  }
+
+  // Update game
+  if (req.method === 'PATCH') {
+    try {
+      const game = await prisma.game.update({
+        where: { id },
+        data: req.body,
+      });
+      res.status(200).json(game);
+    } catch (e) {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
+  } else if (req.method === 'DELETE') {
+    try {
+      const game = await prisma.game.delete({
+        where: { id },
+      });
+      // Remove image from Supabase storage
+      if (game.image) {
+        const path = game.image.split(`${process.env.SUPABASE_BUCKET}/`)?.[1];
+        await supabase.storage.from(process.env.SUPABASE_BUCKET).remove([path]);
+      }
+      res.status(200).json(game);
+    } catch (e) {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
+  }
+  // HTTP method not supported!
+  else {
+    res.setHeader('Allow', ['PATCH', 'DELETE']);
+    res
+      .status(405)
+      .json({ message: `HTTP method ${req.method} is not supported.` });
+  }
+}
