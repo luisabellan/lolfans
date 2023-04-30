@@ -60,7 +60,7 @@ const Players = (props: Props): JSX.Element => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu isUserLogged={false} />
+      <HeaderMenu isUserLogged={loggedIn} />
 
       <Main>
         <h1 tw="text-3xl font-bold mt-16">Search summoner</h1>
