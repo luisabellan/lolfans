@@ -8,10 +8,10 @@
     "node_modules"
   ],
   "scripts": {
-    "postinstall": "pnpx prisma migrate dev",
-    "dev": "pnpx prisma generate && next dev",
-    "build": "pnpx prisma generate && next build",
-    "start": "pnpx prisma generate && next start",
+    "postinstall": "pnpx prisma migrate dev && pnpx prisma generate",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "seed": "pnpx ts-node --transpile-only ./prisma/seed.ts",
     "reset": "rm -rf node_modules ; rm pnpm-lock.yaml ; rm -rf .next ; rm -rf prisma/migrations ; pnpx prisma format"
@@ -35,6 +35,7 @@
     "@trpc/react-query": "^10.22.0",
     "@trpc/server": "^10.22.0",
     "axios": "^1.3.5",
+    "base64-arraybuffer": "^1.0.2",
     "classnames": "^2.3.1",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",

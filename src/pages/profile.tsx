@@ -129,11 +129,10 @@ const ProfilePage: React.FC<ProfileProps> = () => {
           <h1>Profile</h1>
           {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 
-
-          {avatarUrl && <Image src={avatarUrl} alt="Avatar" />}
+          <Image width={50} height={50} src={session?.user?.image} alt="Avatar" />
           <Form onSubmit={handleSubmit}>
-            {userName ? (
-              <span>Username: {userName}</span>
+            {session.user.name ? (
+              <span>Username: {session.user.name}</span>
             ) : (
               <TextInput value={text} onChange={setText} />
             )}
