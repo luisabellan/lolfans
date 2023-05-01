@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
 import { useAtom } from "jotai";
 import { isUserLoggedAtom, userNameAtom } from "@/atoms/store";
@@ -7,9 +7,13 @@ import tw, { styled } from "twin.macro";
 import Head from "next/head";
 import HeaderMenu from "@/components/HeaderMenu";
 import axios from "axios";
+import AccessDenied from "@/components/AccessDenied"
+import { useSession } from "next-auth/react";
+import Layout from "@/components/Layout";
+
 
 const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -66,6 +70,21 @@ const ProfilePage: React.FC<ProfileProps> = () => {
 
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [userName, setUserName] = useAtom(userNameAtom);
+  const { data: session } = useSession()
+  const [content, setContent] = useState()
+
+  // Fetch content from protected route
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/examples/protected")
+      const json = await res.json()
+      if (json.content) {
+        setContent(json.content)
+      }
+    }
+    fetchData()
+  }, [session])
+
 
   const TextInput = ({ value, onChange }: Props) => {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,50 +110,53 @@ const ProfilePage: React.FC<ProfileProps> = () => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     );
     setImageUrl(response.data.data[0].url);
   };
 
-  return (
-    <>
-      <Head>
-        <title>Search champion</title>
-        <meta name="description" content="Champion search" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <HeaderMenu isUserLogged={true} />
-      <Content>
-        <h1>Profile</h1>
 
-        {avatarUrl && <Image src={avatarUrl} alt="Avatar" />}
-        <Form onSubmit={handleSubmit}>
-          {userName ? (
-            <span>Username: {userName}</span>
-          ) : (
-            <TextInput value={text} onChange={setText} />
-          )}
-          <textarea
-            placeholder="Write a bio here"
-            value={bio}
-            onChange={handleBioChange}
-          ></textarea>
-          <button type="submit">Generate Image</button>
-        </Form>
-      </Content>
-    </>
-  );
-};
+
+
+  // If no session exists, display access denied message
+  return (
+    <Layout>
+      {!session?.user ? <AccessDenied /> : (
+
+        <Content>
+          <h1>Profile</h1>
+          {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+
+          <Image width={50} height={50} src={session?.user?.image} alt="Avatar" />
+          <Form onSubmit={handleSubmit}>
+            {session.user.name ? (
+              <span>Username: {session.user.name}</span>
+            ) : (
+              <TextInput value={text} onChange={setText} />
+            )}
+            <textarea
+              placeholder="Write a bio here"
+              value={bio}
+              onChange={handleBioChange}
+            ></textarea>
+            <button type="submit">Generate Image</button>
+          </Form>
+        </Content>
+      )}
+    </Layout>
+  )
+}
+
+
 
 export default ProfilePage;
 
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY ?? "",
+      apiKey: process.env.OPENAI_API_KEY ?? "",
     },
   };
 }

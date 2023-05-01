@@ -20,20 +20,22 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
-      "@/components/*": ["src/components/*"],
+      "@/*": [
+        "src/*",
+        "./supabase-js.d.ts"
+      ],
       "@/lib/*": ["src/lib/*"],
-      "@/styles/*": ["src/styles/*"],
-      "@/atoms/*": ["src/atoms/*"],
-      "@/server/*": ["src/server/*"],
-
-      
+      "@/components/*": ["src/components/*"],
+      "@prisma/client": [
+        "./node_modules/@prisma/client"
+      ],
     }
   },
   "include": [

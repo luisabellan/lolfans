@@ -8,13 +8,13 @@ To fix this, you can create a separate object called `options` where you can spe
 
 ```typescript
 const options = {
-  clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-  clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
+  clientId: process.env.GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
   authorizationParams: {
     response_type: "code",
     scope: "openid profile email",
   },
-  redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!
+  redirectUri: process.env.GOOGLE_REDIRECT_URI!
 }
 
 // Pass the options object as the second argument to GoogleProvider

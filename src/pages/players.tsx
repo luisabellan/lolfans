@@ -9,7 +9,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const Main = tw.main`flex flex-col justify-between items-center`;
-const Header = tw.h1`text-3xl font-bold`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
 const TextInput = tw(Field)`px-4 py-2 border rounded w-full my-2`;
 const ErrorText = tw.span`text-red-500`;
@@ -61,10 +60,10 @@ const Players = (props: Props): JSX.Element => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderMenu isUserLogged={false} />
+      <HeaderMenu isUserLogged={loggedIn} />
 
       <Main>
-        <Header tw="mt-16">Search summoner</Header>
+        <h1 tw="text-3xl font-bold mt-16">Search summoner</h1>
         <Formik
           initialValues={{
             summonerName: "",
@@ -104,7 +103,7 @@ export default Players;
 export async function getStaticProps() {
   return {
     props: {
-      apiKey: process.env.NEXT_PUBLIC_RIOT_API_KEY ?? "",
+      apiKey: process.env.RIOT_API_KEY ?? "",
     },
   };
 }

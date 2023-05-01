@@ -1,11 +1,30 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import { useSession, signIn, signOut } from "next-auth/react";
 import tw, { styled } from 'twin.macro';
-import { useState } from 'react';
-import { atom, useAtom } from 'jotai';
-import { isUserLoggedAtom } from '@/atoms/store';
-import useHistory from 'next/router';
-import router from 'next/router';
+import css from "@emotion/css";
+import { atom, useAtom } from "jotai";
+import { isUserLoggedAtom } from "@/atoms/store";
+import useHistory from "next/router";
+import router from "next/router";
+import { Fragment, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from "next/image";
+import PropTypes from 'prop-types';
+import AuthModal from './AuthModal';
+import { Menu, Transition } from '@headlessui/react';
+import {
+  HeartIcon,
+  HomeIcon,
+  LogoutIcon,
+  PlusIcon,
+  SparklesIcon,
+  UserIcon,
+} from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+// import { fetchPlayList } from "../lib/youtube";
+
+
 
 const Item = tw.li`list-none pr-6`;
 const Links = tw.ul`flex flex-row justify-end items-center`;
@@ -17,21 +36,57 @@ const noUnderline = {
   textDecoration: 'none',
 };
 
-const loggedInAtom = atom(false);
+
+
 export default function HeaderMenu({
   isUserLogged,
 }: {
   isUserLogged: boolean;
 }) {
-  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
-  const handleLoginClick = (e: { preventDefault: () => void }) => {
+  const { data, status } = useSession();
+  const loading = status === "loading";
+  const isLoadingUser = status === 'loading';
+  const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom)
+  const user = data?.user
+
+  useEffect(()=>{
+    
+    user?.email ? setLoggedIn(true) : setLoggedIn(false)
+  })
+
+
+  const router = useRouter();
+
+  const [showModal, setShowModal] = useState(false);
+
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+  // Your YouTube channel ID here
+  const channelId = "UC-lHJZR3Gqxm24_Vd_AJ5Yw";
+
+  const getVideos = async () => {
+
+    // Call the getPlaylistItems function to fetch the list of videos
+    // const videos = await fetchPlayList(channelId);
+  }
+
+  const handleLogIn = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setLoggedIn(!loggedIn);
+    setLoggedIn(true);
+    signIn("google");
 
-    if (!loggedIn) {
-      router.push('/');
-    }
+  };
+
+  const handleLogOut = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setLoggedIn(true);
+    signOut();
+
+
+
   };
 
   return (
@@ -44,48 +99,42 @@ export default function HeaderMenu({
           width={50}
           height={50}
           priority
-        />
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
       </ImageContainer>
       <Links>
         <Item>
-          <Link css={noUnderline} href='/'>
+          <Link href='/'>
             Home
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href='/players'>
+          <Link href='/players'>
             Players
           </Link>
         </Item>
         <Item>
-          <Link css={noUnderline} href='/champions'>
+          <Link href='/champions'>
             Champions
           </Link>
         </Item>
-        {loggedIn ? (
-          <>
-            <Item>
-              <Link css={noUnderline} href='/profile'>
-                Profile
-              </Link>
-            </Item>
-            <Item>
-              <Link css={noUnderline} href='/logout'>
-                <Button onClick={handleLoginClick}>Logout</Button>
-              </Link>
-            </Item>
-          </>
-        ) : (
-          <>
-            <Item>
-              {/* show link to profile if isUserLogged is true*/}
-              <Link css={noUnderline} href='/login'>
-                <Button onClick={handleLoginClick}>Login</Button>
-              </Link>
-            </Item>
-          </>
-        )}
+        <Item>{loggedIn &&
+          (<Link href='/profile'>
+            Profile
+          </Link>)}
+        </Item>
+
+        <Item>
+          <Link href='/'>
+            {!loggedIn ? (<Button onClick={handleLogIn}>Login</Button>) : (<Button onClick={handleLogOut}>Logout</Button>)}
+          </Link>
+        </Item>
+        
       </Links>
-    </Container>
+    </Container >
   );
 }
+
+

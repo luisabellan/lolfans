@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Image from 'next/image';
+import Image from "next/image";
 import toast from 'react-hot-toast';
 import classNames from 'classnames';
 import { ArrowUpIcon } from '@heroicons/react/outline';
@@ -78,9 +78,9 @@ const ImageUpload = ({
           <Image
             src={image.src}
             alt={image?.alt ?? ''}
-            layout="fill"
             objectFit={objectFit}
-          />
+            fill
+            sizes="100vw" />
         ) : null}
 
         <div className="flex items-center justify-center">

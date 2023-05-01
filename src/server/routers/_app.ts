@@ -8,7 +8,7 @@ export const appRouter = router({
         text: z.string(),
       }),
     )
-    .query(({ input }) => {
+    .query(({ input }): { greeting: string; } => {
       return {
         greeting: `hello ${input.text}`,
       };
