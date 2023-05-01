@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import HeaderMenu from "@/components/HeaderMenu";
@@ -29,22 +30,29 @@ type Props = {
 
 const Players = (props: Props): JSX.Element => {
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
+  const [summonerIcon, setSummonerIcon] = useState("");
   const RIOT_API_KEY = props.apiKey;
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
 
-  const handleSubmit = (values: any) => {
-    const apiCallString = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
+  const handleSubmit = async(values: any) => {
+    const summonerById = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
+    
     axios
-      .get(apiCallString)
-      .then((res) => {
-        console.log(res.data);
-        setPlayerInfo(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-        alert("Summoner not found");
-      });
+    .get(summonerById)
+    .then((res) => {
+      setPlayerInfo(res.data);
+    })
+    .catch((e) => {
+      console.log(e);
+      alert("Summoner not found");
+    });
+    
+    await setSummonerIcon(`https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${playerInfo.profileIconId}.png`);
+      
   };
+
+
+ 
 
   const playerSchema = Yup.object().shape({
     summonerName: Yup.string()
@@ -88,8 +96,11 @@ const Players = (props: Props): JSX.Element => {
         <div>
           {playerInfo.name && (
             <>
-              <p>Name: {playerInfo.name}</p>
-              <p>Level: {playerInfo.summonerLevel}</p>
+              <p>{playerInfo.name}</p>
+              <Image width={50} height={50} src={summonerIcon} alt={"Profile Icon"} />
+              <p>Lvl: {playerInfo.summonerLevel}</p>
+              <p>KDA: {playerInfo.summonerLevel}</p>
+              <p>Division: {playerInfo.summonerLevel}</p>
             </>
           )}
         </div>

@@ -51,7 +51,6 @@ export default function HeaderMenu({
   const user = data?.user
 
   useEffect(()=>{
-    
     user?.email ? setLoggedIn(true) : setLoggedIn(false)
   })
 
