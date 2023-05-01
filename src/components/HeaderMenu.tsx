@@ -5,7 +5,7 @@ import { atom, useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
 import useHistory from "next/router";
 import router from "next/router";
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -50,7 +50,11 @@ export default function HeaderMenu({
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom)
   const user = data?.user
 
-  user?.email ? setLoggedIn(true) : setLoggedIn(false)
+  useEffect(()=>{
+    
+    user?.email ? setLoggedIn(true) : setLoggedIn(false)
+  })
+
 
   const router = useRouter();
 
@@ -71,13 +75,16 @@ export default function HeaderMenu({
 
   const handleLogIn = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setLoggedIn(true);
     signIn("google");
 
   };
 
   const handleLogOut = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    signOut()
+    setLoggedIn(true);
+    signOut();
+
 
 
   };
