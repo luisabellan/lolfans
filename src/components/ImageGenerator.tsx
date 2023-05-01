@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import tw, { css, styled } from 'twin.macro';
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, useField } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import Image from "next/image";
@@ -14,6 +14,15 @@ interface ImageResponse {
 const validationSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
 });
+
+
+function Error({ name }: { name: string }) {
+  const [field, meta] = useField(name);
+  return meta.touched && meta.error ? (
+    <div className="error">{meta.error}</div>
+  ) : null;
+}
+
 
 export default function ImageGenerator(): JSX.Element {
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -48,7 +57,7 @@ export default function ImageGenerator(): JSX.Element {
           <label htmlFor="description">Description:</label>
           <Field type="text" name="description" id="description" />
           <div tw="text-red-600">
-            <ErrorMessage name="description" component="div" />
+            <Error name="description" />
           </div>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Generating..." : "Generate Image"}

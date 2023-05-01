@@ -22,7 +22,7 @@ import {
   UserIcon,
 } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { fetchPlayList } from "../lib/youtube";
+// import { fetchPlayList } from "../lib/youtube";
 
 
 
@@ -66,7 +66,7 @@ export default function HeaderMenu({
   const getVideos = async () => {
 
     // Call the getPlaylistItems function to fetch the list of videos
-    const videos = await fetchPlayList(channelId);
+    // const videos = await fetchPlayList(channelId);
   }
 
   const handleLogIn = (e: { preventDefault: () => void }) => {

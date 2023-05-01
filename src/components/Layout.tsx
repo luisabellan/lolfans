@@ -10,7 +10,11 @@ import { useSession, signOut } from "next-auth/react";
 import HeaderMenu from "./HeaderMenu";
 import Welcome from "./Welcome";
 
-export default function Layout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function Layout({ children }: Props) {
   return (
     <>
       <Head>
@@ -20,12 +24,10 @@ export default function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HeaderMenu />
+      <HeaderMenu isUserLogged />
 
       <main className="pt-8">{children}</main>
         
     </>
-
-    
   );
 }

@@ -3,11 +3,13 @@ import { trpc } from "@/lib/trpc";
 import GlobalStyles from "@/styles/GlobalStyles";
 
 import { Provider as StateProvider } from "jotai";
-import { SessionProvider as AuthProvider, Session } from "next-auth/react";
+import { SessionProvider as AuthProvider, getSession } from "next-auth/react";
 
 interface MyAppProps extends AppProps {
-  session: Session;
+  session:any;
 }
+
+
 
 function MyApp({ Component, pageProps, session }: MyAppProps) {
   return (
