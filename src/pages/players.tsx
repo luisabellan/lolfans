@@ -25,6 +25,7 @@ interface PlayerInfo {
   puuid: string;
   accountId: string;
   revisionDate: string;
+  averageKda: string;
 }
 
 type Props = {
@@ -56,13 +57,14 @@ const Players = (props: Props): JSX.Element => {
       );
   
       const matchesRes = await Promise.all(myMatchesUrls.map((url: string) => axios.get(url)));
-      const myMatchesData = matchesRes.map((res: AxiosResponse<any>) => res.data);
+      const myMatchesData = matchesRes.map((res: any) => res.data) as never[];
       setMatches([...myMatchesData]);
     } catch (e) {
       console.log(e);
       // alert("Summoner not found");
     }
   };
+  
   
 
   const playerSchema = Yup.object().shape({
@@ -112,6 +114,7 @@ const Players = (props: Props): JSX.Element => {
               <div tw="self-start pt-10">
                 <p tw="self-start text-2xl">Lvl: {playerInfo.summonerLevel}</p>
                 <p tw="self-start text-2xl">Division: {playerInfo.summonerLevel}</p>
+                <p tw="self-start text-2xl">KDA: {playerInfo.averageKda}</p>
 
               </div>
               <Header tw="text-4xl text-center pt-20">Last 10 matches</Header>

@@ -1,13 +1,14 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { SetStateAction, useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
 import HeaderMenu from "@/components/HeaderMenu";
 import tw, { styled } from "twin.macro";
 import { useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { match } from "assert";
 
 const Main = tw.main`flex flex-col justify-between items-center`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
@@ -18,94 +19,68 @@ const SummonerInfo = tw.h2`flex flex-col items-start self-center  pt-20`;
 
 interface PlayerInfo {
   id: string;
-  name: string;
+  summonerName: string;
   profileIconId: string;
   summonerLevel: string;
   puuid: string;
   accountId: string;
   revisionDate: string;
+  averageKda: string;
 }
 
 type Props = {
   apiKey: string;
 };
 
-
-interface MatchProps {
-  matchID: number;
-}
-
-const MatchComponent = ({ matchID }: MatchProps) => {
-  const [matchData, setMatchData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchMatchData = async () => {
-      const response = await fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${RIOT_API_KEY}`);
-      const myMatchData = await response.json();
-      setMatchData(myMatchData);
-    };
-
-    fetchMatchData();
-  }, [matchID]);
-
-  // return a div containing the match data
-  return (
-    <div>
-      {matchData && (
-        <>
-          <h1>Match #{matchData.metadata.matchId}</h1>
-          <p>Game Mode: {matchData.info.gameMode}</p>
-          <p>Game Duration: {matchData.info.gameDuration}s</p>
-          {/* display more match data here */}
-        </>
-      )}
-    </div>
-  );
-};
-
-const Players = (props: Props): JSX.Element => {
+const Players = (props: Props) => {
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({} as PlayerInfo);
   const [summonerIcon, setSummonerIcon] = useState("");
   const RIOT_API_KEY = props.apiKey;
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
-  const [matches, setMatches] = useState<undefined | any[]>(undefined); // initialize matches state with undefined
-  const [matchesIDs, setMatchesIDs] = useState([])
+  const [matches, setMatches] = useState([]);
+  const [matchesIDs, setMatchesIDs] = useState([{}]);
 
-
-
-  const handleSubmit = async (values: { summonerName: any; }) => {
+  const handleSubmit = async (values: any) => {
     try {
-      const [summonerRes, matchesIDsRes] = await Promise.all([
-        axios.get(`https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`),
-        axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${res.data.puuid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}`)
-      ]);
+      const summonerById = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
+      const res = await axios.get(summonerById);
+      setPlayerInfo(res.data);
 
-      setPlayerInfo(summonerRes.data);
-      setSummonerIcon(`https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${summonerRes.data.profileIconId}.png`);
+      const summonerIconUrl = `https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${res.data.profileIconId}.png`;
+      setSummonerIcon(summonerIconUrl);
 
-      const myMatchesData = await Promise.all(
-        matchesIDsRes.data.map((matchID: string) =>
-          axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${RIOT_API_KEY}`)
-            .then(res => res.data)
-            .catch(e => console.log(e))
-        )
+      /*   const matchesIDsUrl = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${res.data.puuid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}`;
+      const matchesIDsRes = await axios.get(matchesIDsUrl);
+      const myMatchesUrls = matchesIDsRes.data.map(
+        (matchID: string) => `https://europe.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${RIOT_API_KEY}`
       );
-      setMatches(myMatchesData);
-      console.log(matchesIDs)
-      console.log(matches)
+  
+      const matchesRes = await Promise.all(myMatchesUrls.map((url: string) => axios.get(url)));
+      const myMatchesData = matchesRes.map((res: AxiosResponse<any>) => res.data);
+      setMatches([...myMatchesData]); */
+
+      // Usage:
+      //const averageKda = await getAverageKda(playerInfo.summonerName);
+      //console.log(`Average KDA: ${averageKda}`);
     } catch (e) {
-      console.error(e);
+      console.log(e);
       // alert("Summoner not found");
     }
   };
+
+  async function getAverageKda(summonerName: string) {
+    const response = await axios.get(`/api/kda?summonerName=${summonerName}`);
+    const data = await JSON.parse(JSON.stringify(response));
+    console.log(data)
+    return data.averageKda;
+  }
+
   const playerSchema = Yup.object().shape({
     summonerName: Yup.string()
       .required("Please type in a summoner name")
       .matches(/^[0-9a-zA-Z _]+$/, "Alphanumeric characters and spaces only"),
   });
 
-
- 
   return (
     <>
       <Head>
@@ -132,31 +107,33 @@ const Players = (props: Props): JSX.Element => {
                 <ErrorText>{errors.summonerName}</ErrorText>
               ) : null}
 
-              <Button type="submit">
-                Search
-              </Button>
+              <Button type="submit">Search</Button>
             </Form>
           )}
         </Formik>
 
         <SummonerInfo tw=" ">
-          {playerInfo.name && (
+          {playerInfo.summonerName && (
             <div tw="flex flex-col items-center">
-              <Header tw="text-4xl text-center">{playerInfo.name}</Header>
-              <Image width={200} height={200} src={summonerIcon} alt={"Profile Icon"} />
+              <Header tw="text-4xl text-center">{playerInfo.summonerName}</Header>
+              <Image
+                width={200}
+                height={200}
+                src={summonerIcon}
+                alt={"Profile Icon"}
+              />
               <div tw="self-start pt-10">
                 <p tw="self-start text-2xl">Lvl: {playerInfo.summonerLevel}</p>
-                <p tw="self-start text-2xl">Division: {playerInfo.summonerLevel}</p>
-
+                <p tw="self-start text-2xl">
+                  Division: {playerInfo.summonerLevel}
+                </p>
+                {/*  <p tw="self-start text-2xl">
+                  KDA: {playerInfo.averageKda}
+                </p> */}
               </div>
-              <Header tw="text-4xl text-center pt-20">Last 10 matches</Header>
-             
-             {
-              matches?.map((matchID) => <MatchComponent matchID={matchID} />)
-             }
 
-
-             
+              {/* <Header tw="text-4xl text-center pt-20">Last 10 matches</Header> */}
+              {/*console.log(matchesIDs)*/}
             </div>
           )}
         </SummonerInfo>
