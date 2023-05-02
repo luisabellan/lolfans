@@ -1,14 +1,18 @@
 import Head from "next/head";
 import Image from "next/image";
-import { SetStateAction, useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import HeaderMenu from "@/components/HeaderMenu";
 import tw, { styled } from "twin.macro";
 import { useAtom } from "jotai";
 import { isUserLoggedAtom } from "@/atoms/store";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { match } from "assert";
+
+// Import react-dom and react-icons
+import { render } from 'react-dom';
+import { FaSearch } from 'react-icons/fa';
+
 
 const Main = tw.main`flex flex-col justify-between items-center`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
@@ -26,7 +30,6 @@ interface PlayerInfo {
   accountId: string;
   revisionDate: string;
   averageKda: string;
-  division: string;
 }
 
 type Props = {
@@ -38,73 +41,55 @@ const Players = (props: Props): JSX.Element => {
   const [summonerIcon, setSummonerIcon] = useState("");
   const RIOT_API_KEY = props.apiKey;
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
-  const [matches, setMatches] = useState([])
-  const [matchesIDs, setMatchesIDs] = useState([{}])
-
-
-  /*  const handleSubmit = async (values: any) => {
-     try {
-       const summonerById = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
-       const res = await axios.get(summonerById);
-       setPlayerInfo(res.data);
-   
-       const summonerIconUrl = `https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${res.data.profileIconId}.png`;
-       setSummonerIcon(summonerIconUrl);
-   
-       const matchesIDsUrl = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${res.data.puuid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}`;
-       const matchesIDsRes = await axios.get(matchesIDsUrl);
-       const myMatchesUrls = matchesIDsRes.data.map(
-         (matchID: string) => `https://europe.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${RIOT_API_KEY}`
-       );
-   
-       const matchesRes = await Promise.all(myMatchesUrls.map((url: string) => axios.get(url)));
-       const myMatchesData = matchesRes.map((res: any) => res.data) as never[];
-       setMatches([...myMatchesData]);
-     } catch (e) {
-       console.log(e);
-       // alert("Summoner not found");
-     }
-   }; */
-
-  async function getDivision(summonerId: string, apiKey: string) {
-    try {
-      const response = await axios.get(
-        `https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`
-      );
-      const { tier, rank } = response.data[0];
-      return `${tier} ${rank}`;
-    } catch (error) {
-      console.error(error);
+  // Remove initial array argument from setMatches
+  const [matches, setMatches] = useState([]);
+  const [matchesIDs, setMatchesIDs] = useState([{}]);
+  
+  // Await the getAverageKda function before rendering the KDA value
+  useEffect(() => {
+    async function getKda() {
+      if (playerInfo.name) {
+        const kda = await getAverageKda(playerInfo.name);
+        setPlayerInfo((prevState) => ({ ...prevState, averageKda: kda }));
+      }
     }
-  }
-
+    getKda();
+  }, [playerInfo.name]);
 
   const handleSubmit = async (values: any) => {
     try {
       const summonerById = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
       const res = await axios.get(summonerById);
-      setPlayerInfo(res.data);
+      const averageKda = getAverageKda(summonerById)
+      setPlayerInfo({
+        ...res.data,
+        averageKda
+
+      });
 
       const summonerIconUrl = `https://ddragon.leagueoflegends.com/cdn/13.8.1/img/profileicon/${res.data.profileIconId}.png`;
       setSummonerIcon(summonerIconUrl);
 
-      const division = await getDivision(res.data.id, RIOT_API_KEY);
-      setPlayerInfo((prevState) => ({ ...prevState, division: division || "" }));
+      /*  const matchesIDsUrl = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${res.data.puuid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}`;
+      const matchesIDsRes = await axios.get(matchesIDsUrl);
+      const myMatchesUrls = matchesIDsRes.data.map(
+        (matchID: string) => `https://europe.api.riotgames.com/lol/match/v5/matches/${matchID}?api_key=${RIOT_API_KEY}`
+      );
+
+      const matchesRes = await Promise.all(myMatchesUrls.map((url: string) => axios.get(url)));
+      const myMatchesData = matchesRes.map((res: any) => res.data) as never[];
+      setMatches([...myMatchesData]); */
     } catch (e) {
       console.log(e);
+      // alert("Summoner not found");
     }
   };
 
-
-
   async function getAverageKda(summonerName: string) {
-    const response = await axios.get(`/api/kda?summonerName=${summonerName}`);
-    const data = await JSON.parse(JSON.stringify(response));
-    console.log(data)
-    setPlayerInfo((prevState) => ({ ...prevState, averageKda: data.averageKda }));
-    return data.averageKda;
+    const res = await axios.get(`/api/kda?summonerName=${summonerName}`);
+    console.log(res.data)
+    return res.data;
   }
-
 
   const playerSchema = Yup.object().shape({
     summonerName: Yup.string()
@@ -133,7 +118,11 @@ const Players = (props: Props): JSX.Element => {
         >
           {({ touched, errors }) => (
             <Form>
-              <TextInput type="text" name="summonerName" />
+              {/* Add label for text input field */}
+              <label htmlFor="summonerName">
+                Summoner name
+                <TextInput type="text" name="summonerName" id="summonerName"/>
+              </label>  
               {errors.summonerName && touched.summonerName ? (
                 <ErrorText>{errors.summonerName}</ErrorText>
               ) : null}
@@ -152,9 +141,9 @@ const Players = (props: Props): JSX.Element => {
               <Image width={200} height={200} src={summonerIcon} alt={"Profile Icon"} />
               <div tw="self-start pt-10">
                 <p tw="self-start text-2xl">Lvl: {playerInfo.summonerLevel}</p>
-                <p tw="self-start text-2xl">Division: {playerInfo.division}</p>
+                <p tw="self-start text-2xl">Division: {playerInfo.summonerLevel}</p>
+                {/* Render the KDA value */}
                 <p tw="self-start text-2xl">KDA: {playerInfo.averageKda}</p>
-
               </div>
               <Header tw="text-4xl text-center pt-20">Last 10 matches</Header>
               {console.log(matchesIDs)}
