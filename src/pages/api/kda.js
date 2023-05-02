@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   const { summonerName } = req.query;
+  const api_key = process.env.RIOT_API_KEY
 
   try {
     // Get encrypted account ID for given summoner name
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
 
     // Get match list for given account ID
 
-    const matchListResponse = await axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${res.data.puuid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}`);
+    const matchListResponse = await axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${process.env.RIOT_API_KEY}`);
     const matches = matchListResponse.data.matches;
     console.log(matches)
     let totalKda = 0;
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
     // Iterate through each match and calculate KDA for requested summoner
     for (const match of matches) {
       const matchId = match.gameId;
-      // const matchResponse = await axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${process.env.RIOT_API_KEY}`);
+      const matchResponse = await axios.get(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${process.env.RIOT_API_KEY}`);
       const matchData = matchListResponse.data;
 
       let participantId = null;
