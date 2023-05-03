@@ -30,6 +30,13 @@ interface PlayerInfo {
   division: string;
 }
 
+interface Match {
+  id: number;
+  champion: string;
+  role: string;
+  // add any other properties here
+}
+
 type Props = {
   apiKey: string;
 };
@@ -39,9 +46,8 @@ const Players = (props: Props): JSX.Element => {
   const [summonerIcon, setSummonerIcon] = useState("");
   const RIOT_API_KEY = props.apiKey;
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
-  const [matches, setMatches] = useState([])
-  const [matchesIDs, setMatchesIDs] = useState([{}])
-
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [matchesIDs, setMatchesIDs] = useState([{}]);
 
   /*  const handleSubmit = async (values: any) => {
      try {
@@ -79,7 +85,6 @@ const Players = (props: Props): JSX.Element => {
     }
   }
 
-
   const handleSubmit = async (values: any) => {
     try {
       const summonerById = `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${values.summonerName}?api_key=${RIOT_API_KEY}`;
@@ -90,25 +95,34 @@ const Players = (props: Props): JSX.Element => {
       setSummonerIcon(summonerIconUrl);
 
       const division = await getDivision(res.data.id, RIOT_API_KEY);
-      setPlayerInfo((prevState) => ({ ...prevState, division: division ?? "" }));
+      setPlayerInfo((prevState) => ({
+        ...prevState,
+        division: division ?? "",
+      }));
 
-      // const kda = await getAverageKda(res.data.puuid, RIOT_API_KEY)
-
+      try {
+        const kda = await getAverageKda(res.data.puuid, RIOT_API_KEY);
+        setPlayerInfo((prevState) => ({ ...prevState, kda: kda ?? "" }));
+      } catch (error) {
+        console.error("Failed to update player info", error);
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-
-
-
-  async function getAverageKda(summonerPuuid: string, apiKey: string): Promise<void> {
+  async function getAverageKda(
+    summonerPuuid: string,
+    apiKey: string
+  ): Promise<void> {
     const matchlistUrl = `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${summonerPuuid}/ids?start=0&count=20&api_key=${apiKey}`;
     const response = await axios.get(matchlistUrl);
 
     const matchIds = response.data.matches.map((match: any) => match.gameId);
     const matchDetailsPromises = matchIds.map((matchId: number) =>
-      axios.get(`https://euw1.api.riotgames.com/lol/match/v4/matches/${matchId}?api_key=${apiKey}`)
+      axios.get(
+        `https://euw1.api.riotgames.com/lol/match/v4/matches/${matchId}?api_key=${apiKey}`
+      )
     );
 
     try {
@@ -116,7 +130,8 @@ const Players = (props: Props): JSX.Element => {
       const kdaValues = matchDetailsResponses.map((response: any) => {
         const matchData = response.data;
         const participantId = matchData.participantIdentities.find(
-          (participant: any) => participant.player.summonerName === summonerPuuid
+          (participant: any) =>
+            participant.player.summonerName === summonerPuuid
         ).participantId;
         const stats = matchData.participants[participantId - 1].stats;
         const kills = stats.kills;
@@ -125,20 +140,17 @@ const Players = (props: Props): JSX.Element => {
 
         return `${kills} / ${deaths} / ${assists}`;
       });
-
     } catch (e) {
       console.log(e); // log error to console
       throw new Error("An error occurred while fetching match details."); // optional: rethrow custom error
     }
   }
 
-
   const playerSchema = Yup.object().shape({
     summonerName: Yup.string()
       .required("Please type in a summoner name")
       .matches(/^[0-9a-zA-Z _]+$/, "Alphanumeric characters and spaces only"),
   });
-
 
   return (
     <>
@@ -166,9 +178,7 @@ const Players = (props: Props): JSX.Element => {
                 <ErrorText>{errors.summonerName}</ErrorText>
               ) : null}
 
-              <Button type="submit">
-                Search
-              </Button>
+              <Button type="submit">Search</Button>
             </Form>
           )}
         </Formik>
@@ -177,16 +187,40 @@ const Players = (props: Props): JSX.Element => {
           {playerInfo.name && (
             <div tw="flex flex-col items-center">
               <Header tw="text-4xl text-center">{playerInfo.name}</Header>
-              <Image width={200} height={200} src={summonerIcon} alt={"Profile Icon"} />
+              <Image
+                width={200}
+                height={200}
+                src={summonerIcon}
+                alt={"Profile Icon"}
+              />
               <div tw="self-start pt-10">
                 <p tw="self-start text-2xl">Lvl: {playerInfo.summonerLevel}</p>
                 <p tw="self-start text-2xl">Division: {playerInfo.division}</p>
                 <p tw="self-start text-2xl">KDA: {playerInfo.averageKda}</p>
-
               </div>
               <Header tw="text-4xl text-center pt-20">Last 10 matches</Header>
-              {/* Add last 10 games here in a nice table */}
-              {console.log(matchesIDs)}
+              <table>
+                <thead>
+                  <tr>
+                    <th>Match ID</th>
+                    <th>Champion</th>
+                    <th>Role</th>
+                    <th>Result</th>
+                    <th>KDA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {matches.map((match) => (
+                    <tr key={`match-${match.id}`}>
+                      <td>{match.id}</td>
+                      <td>{match.champion}</td>
+                      <td>{match.role}</td>
+                      <td>{match.result}</td>
+                      <td>{match.kda}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </SummonerInfo>
