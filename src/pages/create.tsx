@@ -6,7 +6,7 @@ import axios, { AxiosResponse } from "axios";
 
 
 
-const Create = (): Props => {
+const Create = () => {
   const addGame = (data: Game) => axios.post("/api/games", data);
 
   return (
