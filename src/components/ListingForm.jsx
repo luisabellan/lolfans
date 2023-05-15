@@ -6,25 +6,22 @@ import { toast } from 'react-hot-toast';
 import { Formik, Form } from 'formik';
 import Input from '@/components/Input';
 import ImageUpload from '@/components/ImageUpload';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { Game } from '@prisma/client';
 
 const ListingSchema = Yup.object().shape({
   title: Yup.string().trim().required(),
   description: Yup.string().trim().required(),
 });
 
-const ListingForm = ({
-  initialValues = null,
-  redirectPath = '',
-  buttonText = 'Submit',
-  onSubmit = () => null,
-}) => {
+
+const ListingForm = () => {
   const router = useRouter();
 
   const [disabled, setDisabled] = useState(false);
   const [imageUrl, setImageUrl] = useState(initialValues?.image ?? '');
 
-  const upload = async image => {
+  const upload = async (image) => {
     if (!image) return;
 
     let toastId;
@@ -73,9 +70,10 @@ const ListingForm = ({
     <div>
       <div className="mb-8 max-w-md">
         <ImageUpload
-          initialImage={{ src: image, alt: initialFormValues.title }}
+          initialImage={image ? Image : null}
           onChangePicture={upload}
         />
+        
       </div>
 
       <Formik

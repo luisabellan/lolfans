@@ -1,9 +1,12 @@
 import Layout from "@/components/Layout";
 import ListingForm from "@/components/ListingForm";
 import { Game } from "@prisma/client";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
-const Create = () => {
+
+
+
+const Create = (): Props => {
   const addGame = (data: Game) => axios.post("/api/games", data);
 
   return (
@@ -19,7 +22,7 @@ const Create = () => {
            redirectPath="/"
            onSubmit={addGame}
 
-         />
+         /> as Props
          
         </div>
       </div>
