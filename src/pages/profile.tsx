@@ -63,6 +63,15 @@ const Form = tw.form`
 
 const Main = tw.main`flex flex-col justify-between items-center p-24 min-h-screen`;
 
+
+const TextInput = ({ value, onChange }: Props) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+  };
+
+  return <input type="text" value={value} onChange={handleInputChange} />;
+};
+
 const ProfilePage: React.FC<ProfileProps> = () => {
   const [bio, setBio] = useState("");
   const [avatarUrl, setImageUrl] = useState<string | null>(null);
@@ -86,13 +95,7 @@ const ProfilePage: React.FC<ProfileProps> = () => {
   }, [session])
 
 
-  const TextInput = ({ value, onChange }: Props) => {
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value);
-    };
 
-    return <input type="text" value={value} onChange={handleInputChange} />;
-  };
 
   const handleBioChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
@@ -129,7 +132,7 @@ const ProfilePage: React.FC<ProfileProps> = () => {
           <h1>Profile</h1>
           {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 
-          <Image width={50} height={50} src={session?.user?.image} alt="Avatar" />
+          <Image width={50} height={50} src={session?.user?.image || undefined } alt="Avatar" />
           <Form onSubmit={handleSubmit}>
             {session.user.name ? (
               <span>Username: {session.user.name}</span>

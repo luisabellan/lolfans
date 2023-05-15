@@ -18,6 +18,7 @@ const ListingSchema = Yup.object().shape({
 const ListingForm = () => {
   const router = useRouter();
 
+  const [initialValues] = useState(null)
   const [disabled, setDisabled] = useState(false);
   const [imageUrl, setImageUrl] = useState(initialValues?.image ?? '');
 
@@ -110,7 +111,7 @@ const ListingForm = () => {
                 disabled={disabled || !isValid}
                 className="bg-red-600 text-white py-2 px-6 rounded-md focus:outline-none focus:ring-4 focus:ring-red-600 focus:ring-opacity-50 hover:bg-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-red-600"
               >
-                {isSubmitting ? 'Submitting...' : buttonText}
+                {isSubmitting ? 'Submitting...' : "Submit"}
               </button>
             </div>
           </Form>

@@ -11,7 +11,6 @@ interface MyAppProps extends AppProps {
 }
 
 
-
 function MyApp({ Component, pageProps, session }: MyAppProps) {
   return (
     <>

@@ -16,7 +16,7 @@ import { useAtom, atom} from "jotai";
 import AuthModal from "@/components/AuthModal";
 import { isUserLoggedAtom, userNameAtom} from "@/atoms/store";
 // const inter = Inter({ subsets: ['latin'] })
-import Game, { GameProps } from "@/components/Game";
+// import Game, { GameProps } from "@/components/Game";
 
 import { PrismaClient } from '@prisma/client';
 
@@ -38,11 +38,11 @@ export async function getServerSideProps() {
 type ChildFunction = () => React.ReactNode;
 
 type HomeProps = {
-  games: Game[];
+  // games: Game[];
   children?: ChildFunction;
 }
 
-export default function Home({ games = [], children }: HomeProps) {
+  export default function Home({ children }: HomeProps): JSX.Element {
   const [loggedIn, setLoggedIn] = useAtom(isUserLoggedAtom);
   const [name, setName] = useAtom(userNameAtom);
   const [showModal, setShowModal] = useState(false);
