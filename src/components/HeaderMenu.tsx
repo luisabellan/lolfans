@@ -51,7 +51,6 @@ export default function HeaderMenu({
   const user = data?.user
 
   useEffect(()=>{
-    
     user?.email ? setLoggedIn(true) : setLoggedIn(false)
   })
 
@@ -92,6 +91,8 @@ export default function HeaderMenu({
   return (
     <Container>
       <ImageContainer>
+        {/* TODO: Add logo here
+        
         <Image
           src='/logos/logo.png'
           alt='LoLFans Logo'
@@ -102,7 +103,8 @@ export default function HeaderMenu({
           style={{
             maxWidth: "100%",
             height: "auto"
-          }} />
+          }} /> */}
+
       </ImageContainer>
       <Links>
         <Item>

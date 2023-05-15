@@ -9,7 +9,7 @@ import tw, { styled } from "twin.macro";
 
 import HeaderMenu from "@/components/HeaderMenu";
 
-const Header = tw.h1`text-3xl font-bold`;
+const Header = tw.h1`text-3xl font-bold pt-8`;
 const Main = tw.main`flex flex-col justify-between items-center`;
 const CustomForm = tw.form`flex flex-col`;
 const Button = tw.button`bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`;
@@ -89,7 +89,7 @@ export default function Champions() {
             <CustomForm>
               <Field type="text" id="searchText" name="searchText" as={TextInput}/>
 
-              <ErrorMessage name="searchText" component={ErrorText} />
+              <ErrorMessage  name="searchText" component={ErrorText} />
 
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Searching..." : "Search"}
