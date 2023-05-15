@@ -40,8 +40,6 @@ const noUnderline = {
 
 export default function HeaderMenu({
   isUserLogged,
-}: {
-  isUserLogged: boolean;
 }) {
 
   const { data, status } = useSession();
@@ -72,14 +70,14 @@ export default function HeaderMenu({
     // const videos = await fetchPlayList(channelId);
   }
 
-  const handleLogIn = (e: { preventDefault: () => void }) => {
+  const handleLogIn = (e) => {
     e.preventDefault();
     setLoggedIn(true);
     signIn("google");
 
   };
 
-  const handleLogOut = (e: { preventDefault: () => void }) => {
+  const handleLogOut = (e) => {
     e.preventDefault();
     setLoggedIn(true);
     signOut();

@@ -14,8 +14,8 @@ module.exports = withTwin({
     appDir: true,
   }, */
    // Allow API requests from all domains
-   source: '/api/:path*',
-   headers: [
+  //  source: '/api/:path*',
+  /*  headers: [
      {
        key: 'Access-Control-Allow-Origin',
        value: '*',
@@ -29,5 +29,5 @@ module.exports = withTwin({
        value:
          'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
      },
-   ],
+   ], */
 });
