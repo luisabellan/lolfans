@@ -1,20 +1,8 @@
 import React from "react";
 import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
-import PropTypes from "prop-types";
-import AuthModal from "./AuthModal";
-import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { useSession, signOut } from "next-auth/react";
 import HeaderMenu from "./HeaderMenu";
-import Welcome from "./Welcome";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: Props) {
+export default function Layout({ children }) {
   return (
     <>
       <Head>
