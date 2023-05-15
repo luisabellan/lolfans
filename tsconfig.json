@@ -27,13 +27,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/lib/*": ["src/lib/*"],
-      "@/styles/*": ["src/styles/*"],
-      "@/atoms/*": ["src/atoms/*"],
-      "@/server/*": ["src/server/*"],
-
-      
+      "@/*": [
+        "src/*",
+        "./supabase-js.d.ts"
+      ],
+           
     }
   },
   "include": [
