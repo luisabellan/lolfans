@@ -44,7 +44,7 @@
     "handlebars": "^4.7.7",
     "jotai": "^2.0.4",
     "nanoid": "^4.0.2",
-    "next": "^13.3.2",
+    "next": "^12.1.0",
     "next-auth": "^4.22.1",
     "nextjs-cors": "^2.1.2",
     "nodemailer": "^6.9.1",
