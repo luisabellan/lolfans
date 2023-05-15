@@ -89,7 +89,7 @@ export default function Champions() {
             <CustomForm>
               <Field type="text" id="searchText" name="searchText" as={TextInput}/>
 
-              <ErrorMessage  name="searchText" component={ErrorText} />
+              <ErrorText  />
 
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Searching..." : "Search"}

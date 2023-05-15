@@ -30,12 +30,12 @@
       "@/*": [
         "src/*",
       ],
-           
     }
   },
   "include": [
     "src/**/*",
-    "twin.d.ts"
+    "twin.d.ts",
+    "./supabase-js.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -6,7 +6,8 @@ import { Provider as StateProvider } from "jotai";
 import { SessionProvider as AuthProvider, getSession } from "next-auth/react";
 
 interface MyAppProps extends AppProps {
-  session:any;
+  session: any;
+  Component:any;
 }
 
 
