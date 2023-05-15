@@ -6,8 +6,7 @@ import { toast } from 'react-hot-toast';
 import { Formik, Form } from 'formik';
 import Input from '@/components/Input';
 import ImageUpload from '@/components/ImageUpload';
-import axios, { AxiosResponse } from 'axios';
-import { Game } from '@prisma/client';
+import axios from 'axios';
 
 const ListingSchema = Yup.object().shape({
   title: Yup.string().trim().required(),
