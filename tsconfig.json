@@ -29,7 +29,6 @@
     "paths": {
       "@/*": [
         "src/*",
-        "./supabase-js.d.ts"
       ],
            
     }
