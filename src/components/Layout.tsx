@@ -1,8 +1,13 @@
 import React from "react";
 import Head from "next/head";
+
 import HeaderMenu from "./HeaderMenu";
 
-export default function Layout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function Layout({ children }: Props) {
   return (
     <>
       <Head>
